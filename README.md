@@ -7,7 +7,7 @@ It is based in a Udemy course.
 
 <div align="center">
 
-![Aprendiendo ReactJS](courseIcon.png)<br>
+![Aprendiendo ReactJS](courseIcon.PNG)<br>
  [Aprendiendo ReactJS](https://www.udemy.com/course/aprendiendo-react/) for Miguel Ángel Durán García.
 
  </div>
