@@ -1,12 +1,9 @@
 # React-Learning_ReactJS
 Introduction to React.
 
-It is based in a Udemy course.
+It is based in a [Udemy](https://www.udemy.com/) course.
 
 **Status: In develop**
-
-
-  
 
 <div align="center">
 
