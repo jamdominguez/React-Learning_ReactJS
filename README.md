@@ -76,12 +76,23 @@ For me are 12.16.1(Node) and 6.14.2(NPM).
 ```console
 npx create-react-app udemy-course
 ```
-- Access into the application folder a check the strcuture project
-- By default Create React App build a application structure and define several script to execute. Execute the next commad to see the scripts which can be executed (the scripts are defined into package.json)
+- Access into the application folder a check the structure project. Can see how the node_modules was added, src folder was creted with a index.js and a example component App.js (and other files), .gitignore file, dependencies files package-json and package-lock json, and a README.md that contains info about Create React App
+
+<div align="center"
+
+![Create React App structure](create_react_app_structure_01.PNG)
+
+</div>
+
+
+- By default Create React App build a application structure and define several scripts to execute. Execute the next commad to see the scripts which can be executed (the scripts are defined into package.json)
 ```console
 npm run
 ```
-- To run the application in the local machine (localhost:3000) in development mode
+- To run the application in the local machine (localhost:3000) in development mode execute the command start and see the new structure.
+```console
+npm start
+```
 
 
 # 3. Basic Concepts
