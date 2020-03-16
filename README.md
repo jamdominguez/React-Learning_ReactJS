@@ -18,7 +18,7 @@ It is based in a Udemy course.
 
 ### Personal Set Up
 - CUP: i5-7600K@3.80GHz 
-- RAM: 16GB RAM
+- RAM: 16GB
 - Environment: Windows 10
 - Browser: Google Chrome (80)
 - IDE: Visual Studio Code (1.43)
