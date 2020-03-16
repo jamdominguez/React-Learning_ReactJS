@@ -34,6 +34,7 @@ It is based in a Udemy course.
   - [2.1. What we need?](#21-what-we-need)
   - [2.2. Install Node.js and NPM](#22-install-nodejs-and-npm)
   - [2.3. Install Create React App package](#23-install-create-react-app-package)
+  - [2.4. Viewing App.js: Hellow World](#24-viewing-appjs-hellow-world)
 - [3. Basic Concepts](#3-basic-concepts)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
@@ -76,7 +77,7 @@ For me are 12.16.1(Node) and 6.14.2(NPM).
 ```console
 npx create-react-app udemy-course
 ```
-- Access into the application folder a check the structure project. Can see how the node_modules was added, src folder was creted with a index.js and a example component App.js (and other files), .gitignore file, dependencies files package-json and package-lock json, and a README.md that contains info about Create React App
+- Access into the application folder a check the structure project. Can see how the node_modules was added, pulbic folder where the application build is stored, src folder was creted with a index.js and a example component App.js (and other files), .gitignore file, dependencies files package-json and package-lock json, and a README.md that contains info about Create React App
 
 <div align="center"
 
@@ -89,11 +90,67 @@ npx create-react-app udemy-course
 ```console
 npm run
 ```
-- To run the application in the local machine (localhost:3000) in development mode execute the command start and see the new structure.
+- To run the application in the local machine (localhost:3000) in development mode execute the command start.
 ```console
 npm start
 ```
 
+## 2.4. Viewing App.js: Hellow World
+This file was created automatically by Create React App tool. Can check how the first lines import components and libraries necessaries to define a React component.
+
+```js
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Note **class** App (EC6) extends **Component** and has a **render()** method which returns a JSX (no HTML) code, it code type will be procesed and converted to JavaScript. At the bottom of the code can check how the component is **exported in default mode** to can be imported in another file.
+
+If add new elements into render() method, can see how the page is updated automatically when save the file.
+```js
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h2>Hellow World</h2>        
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+```
 
 # 3. Basic Concepts
 # 4. Conditional Render and list
