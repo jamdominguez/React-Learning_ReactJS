@@ -6,8 +6,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h2>Hellow World</h2>        
-        <img src={logo} className="App-logo" alt="logo" />
+        <h2>Hello World</h2>        
+        <h4> It is a component example</h4>
+        <img src={logo} className="App-logo" alt="logo"/>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>

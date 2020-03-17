@@ -19,7 +19,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 - Environment: Windows 10
 - Browser: Google Chrome (80)
 - IDE: Visual Studio Code (1.43)
-- IDE Extensions: Markdown all in one
+- IDE Extensions: Markdown all in one 2.7.0, ESLint 2.1.1
 
 
 ## Table of contents
@@ -32,6 +32,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [2.2. Install Node.js and NPM](#22-install-nodejs-and-npm)
   - [2.3. Install Create React App package](#23-install-create-react-app-package)
   - [2.4. Viewing App.js: Hellow World](#24-viewing-appjs-hellow-world)
+  - [2.5. Linter for Visual Studio Code](#25-linter-for-visual-studio-code)
 - [3. Basic Concepts](#3-basic-concepts)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
@@ -76,7 +77,7 @@ npx create-react-app udemy-course
 ```
 - Access into the application folder a check the structure project. Can see how the node_modules was added, pulbic folder where the application build is stored, src folder was creted with a index.js and a example component App.js (and other files), .gitignore file, dependencies files package-json and package-lock json, and a README.md that contains info about Create React App
 
-<div align="center"
+<div align="center">
 
 ![Create React App structure](create_react_app_structure_01.PNG)
 
@@ -87,9 +88,12 @@ npx create-react-app udemy-course
 ```console
 npm run
 ```
-- To run the application in the local machine (localhost:3000) in development mode execute the command start.
+- To run the application in the local machine (localhost:3000) in development mode execute the command start (remember you must stay into the application folder).
 ```console
 npm start
+```
+```console
+npm run start
 ```
 
 ## 2.4. Viewing App.js: Hellow World
@@ -126,7 +130,7 @@ export default App;
 
 Note **class** App (EC6) extends **Component** and has a **render()** method which returns a JSX (no HTML) code, it code type will be procesed and converted to JavaScript. At the bottom of the code can check how the component is **exported in default mode** to can be imported in another file.
 
-If add new elements into render() method, can see how the page is updated automatically when save the file.
+If add new elements into render() method, can see how the page is updated automatically when save the file, it is called **Live Reloading**.
 ```js
   return (
     <div className="App">
@@ -148,6 +152,54 @@ If add new elements into render() method, can see how the page is updated automa
     </div>
   );
 ```
+
+## 2.5. Linter for Visual Studio Code
+Is important check the terminal after execute a run, warnings and error could appears.
+
+For example if remove a close tag the compiler show error in the terminal and browser. 
+```console
+Failed to compile.
+
+./src/App.js
+  Line 9:9:  Parsing error: Unexpected token
+
+   7 |     <div className="App">
+   8 |       <header className="App-header"
+>  9 |         <h2>Hellow World</h2>
+     |         ^
+  10 |         <img src={logo} className="App-logo" alt="logo" />
+  11 |         <p>
+  12 |           Edit <code>src/App.js</code> and save to reload.
+```
+
+<div align="center">
+
+![Compiling error example](compiling_error_example.PNG)
+
+</div>
+
+By the other way if remove the "alt" property in the img tag, the terimnal show a warning reporting the line.
+```console
+Compiled with warnings.
+
+./src/App.js
+  Line 10:9:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+```
+
+Visual Studio Code has a lintern by default. Lintern is a tool that help us to check code errors the IDE. 
+
+The Visual Studio Code lintern by deault need be configured correctly to use React. To fix the confituration:
+- Create a **.eslintrc** file int he application root with the next code:
+```json
+{
+  "extends": "react-app"
+}
+```
+- Intall the ESLint extension.
+
 
 # 3. Basic Concepts
 # 4. Conditional Render and list
