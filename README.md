@@ -35,6 +35,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [2.5. Linter for Visual Studio Code](#25-linter-for-visual-studio-code)
 - [3. Basic Concepts](#3-basic-concepts)
   - [3.1. What is JSX](#31-what-is-jsx)
+  - [3.2. Components](#32-components)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -229,6 +230,63 @@ All elements must be composed by one tag. If the component created has several t
 ```jsx
 const element = <h1>A title</h1><h2>Another Title</h2> //ERROR
 const element = <div><h1>A title</h1><h2>Another Title</h2></div> //OK
+```
+
+## 3.2. Components
+The React component let divide your user interface in serveral blocks. It help to make the code reusable and maintainable.
+
+Using App.js created by default when the applications was created, is possible divide it in anohter components.
+
+A component is a JavaScript function that accept params called properties or pros and return shomething. For this reason, it is possible extract h2 tag in a component, and the result will be the same. To use a component, use a tag with the same compnent name.
+
+How can define a component?
+1. Like classic function (the App compenent was created like function)
+```jsx
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+//New component Hello
+function Hello(props){
+  return <h2>Hello World! {props.title}</h2>;
+}
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <Hello title="React rules"/>
+        <h4> It is a component example</h4>
+        <img src={logo} className="App-logo" alt="logo"/>
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+```
+
+2. Like a arrow function
+```jsx
+const Hello = (props) => <h2>Hello World! {props.title}</h2>;
+```
+
+3. Like a class (has advantages): It is necesary exteds Componet and at least one method called render. It is necesarry this reference to get the props.
+```jsx
+class Hello extends Component{
+  render(){
+    return (<h2>Hello World! {this.props.title}</h2>);
+  }
+}
 ```
 
 # 4. Conditional Render and list
