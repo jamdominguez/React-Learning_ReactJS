@@ -34,6 +34,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [2.4. Viewing App.js: Hellow World](#24-viewing-appjs-hellow-world)
   - [2.5. Linter for Visual Studio Code](#25-linter-for-visual-studio-code)
 - [3. Basic Concepts](#3-basic-concepts)
+  - [3.1. What is JSX](#31-what-is-jsx)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -200,8 +201,36 @@ The Visual Studio Code lintern by deault need be configured correctly to use Rea
 ```
 - Intall the ESLint extension.
 
-
 # 3. Basic Concepts
+React or ReactJS is a open source library developed in JavaScript for created user interfaces. Some React properties:
+- Declarative
+- Components based
+- Ractive programing: Changes in the component generate new renders
+- Virutal DOM
+- Native events abstraction
+  
+The code always show "what" must render the user interface but not "how" it be renderized, the "how" is a React work.
+
+## 3.1. What is JSX
+Is a language created by Facebook (too) that using a transpiler like [Babel](https://babeljs.io/), is he transpiler used by Create React, is converted to JavaScript.
+
+Use Babel web page to check how JSX code is transpiler. JSX help to write the code usin React. Write code using React library without JSX is so dificulty (check in Babe).
+
+JSX let write HTML and JavaSciprt together. For examplo when create a element in JSX to transpiler can see how a React.createElement function is invoked with three params, the tag name, the attributes and the childrens.
+
+<div align="center">
+
+![Babel JSX eample](babel_jsx_example.PNG)
+
+</div>
+
+
+All elements must be composed by one tag. If the component created has several tag, you must wrap it into a div tag.
+```jsx
+const element = <h1>A title</h1><h2>Another Title</h2> //ERROR
+const element = <div><h1>A title</h1><h2>Another Title</h2></div> //OK
+```
+
 # 4. Conditional Render and list
 # 5. React Developer Tools
 # 6. Events and Forms
