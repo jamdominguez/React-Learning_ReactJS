@@ -38,6 +38,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [3.2. Components](#32-components)
   - [3.3. Props](#33-props)
     - [Pattern to add props](#pattern-to-add-props)
+    - [Functions and Elements like props](#functions-and-elements-like-props)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -381,6 +382,123 @@ export default App;
 ![Props example](props_example.PNG)
 
 </div>
+
+### Functions and Elements like props
+One of the more importart props that a compoenent can have is a **function**.
+When write this.props several time, the code turn complex, is typical use the restructuration:
+```jsx
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class Text extends Component {
+  render() {    
+    const {
+      arrayOfNumbers,
+      isActived,
+      multiply // Function
+    } = this.props;
+
+    const textBoolean = isActived ? 'Yes' : 'No';
+    const mappedNumbers = arrayOfNumbers.map(multiply).join(", ")
+    return (
+      <div>
+        <p>{textBoolean}</p>
+        <p>Result: {multiply(5)}</p>
+        <p>Result map: {mappedNumbers}</p>
+      </div>
+    )
+  }
+}
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+        <header className="App-header">          
+          <h4> It is a component example</h4>
+          <img src={logo} className="App-logo" alt="logo"/>
+          <Text
+            arrayOfNumbers = {[2,4,5]}
+            isActived
+            multiply={(number) => number*2} //Function
+          />
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+The last prop tye is the **element**. Theses element are **React Elements**
+
+```jsx
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class Text extends Component {
+  render() {
+    //restructuration
+    const {
+      arrayOfNumbers,
+      isActived,
+      multiply, // Function
+      title // React Element
+    } = this.props;
+
+    const textBoolean = isActived ? 'Yes' : 'No';
+    const mappedNumbers = arrayOfNumbers.map(multiply).join(", ")
+    return (
+      <div>
+        {title}
+        <p>{textBoolean}</p>
+        <p>Result: {multiply(5)}</p>
+        <p>Result map: {mappedNumbers}</p>
+      </div>
+    )
+  }
+}
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+        <header className="App-header">          
+          <h4> It is a component example</h4>
+          <img src={logo} className="App-logo" alt="logo"/>
+          <Text
+            arrayOfNumbers = {[2,4,5]}
+            isActived
+            multiply={(number) => number*2} // Function
+            title={<h1>It is a title</h1>} // React Element
+          />
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
 
 
 # 4. Conditional Render and list

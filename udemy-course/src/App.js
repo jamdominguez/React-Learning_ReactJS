@@ -4,17 +4,22 @@ import './App.css';
 
 class Text extends Component {
   render() {
-    const isText = this.props.isActivated ? 'On' : 'Off';
-    const mappedNumbers = this.props.arrayOfNumbers.map(n => n * 2);
+    //restructuration
+    const {
+      arrayOfNumbers,
+      isActived,
+      multiply,
+      title
+    } = this.props;
+
+    const textBoolean = isActived ? 'Yes' : 'No';
+    const mappedNumbers = arrayOfNumbers.map(multiply).join(", ")
     return (
       <div>
-        <p>{this.props.text}</p>
-        <p>{this.props.number}</p>
-        <p>{isText}</p>        
-        <p>{this.props.arrayOfNumbers}</p>
-        <p>{this.props.arrayOfNumbers.join(', ')}</p>
-        <p>{mappedNumbers.join(', ')}</p>
-        <p>{this.props.objectWithInfo.size} {this.props.objectWithInfo.color}</p>
+        {title}
+        <p>{textBoolean}</p>
+        <p>Result: {multiply(5)}</p>
+        <p>Result map: {mappedNumbers}</p>
       </div>
     )
   }
@@ -28,11 +33,10 @@ class App extends Component{
           <h4> It is a component example</h4>
           <img src={logo} className="App-logo" alt="logo"/>
           <Text
-            arrayOfNumbers={[2, 3, 10]}
-            isActivated
-            number={2}
-            objectWithInfo={{color:'blue', size: 'big'}}
-            text="Using props"
+            arrayOfNumbers = {[2,4,5]}
+            isActived
+            multiply={(number) => number*2}
+            title={<h1>It is a title</h1>}
           />
           <a
             className="App-link"
