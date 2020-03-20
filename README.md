@@ -36,6 +36,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 - [3. Basic Concepts](#3-basic-concepts)
   - [3.1. What is JSX](#31-what-is-jsx)
   - [3.2. Components](#32-components)
+- [3.3. Props](#33-props)
+    - [Pattern to add props](#pattern-to-add-props)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -288,6 +290,95 @@ class Hello extends Component{
   }
 }
 ```
+# 3.3. Props
+The props let parameterize the components. Modify App.js to add a new component inside Text with a prop type number. How can check the return of the new component is wrapped with a div, by other way generate a error. Props are defined into bracers and used into bracers too **{}**.
+**The render() method must return one element**
+
+```jsx
+class Text extends Component {
+  render() {
+    const isText = this.props.boolean ? 'Yes' : 'No';
+    return (
+      <div>
+        <p>Text: {this.props.text}</p>
+        <p> Number: {this.props.number}</p>
+        <p> Boolean: {this.props.boolean}</p>
+        <p> Boolean: {JSON.stringify(this.props.boolean)} </p>
+        <p> Boolean: {isText} </p>
+        <p> Boolean2: {JSON.stringify(this.props.boolean2)} </p>
+      </div>
+    )
+  }
+}
+
+...
+<Text number={2} text="Using props" boolean={false} boolean2/>
+```
+The boolean props not are rendered, it is possible conert it to string.
+It is possible render variables, no only props in the components.
+If a **props** is indicated **without value**, the **default value is true**, check in the code boolean2 prop.
+
+### Pattern to add props
+- Each prop by line
+- Alphabetically ordered 
+
+It is so usable hand object into components due many APIs return objet. The next code show how define and use several props type (text, number, array, object)
+```jsx
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class Text extends Component {
+  render() {
+    const isText = this.props.isActivated ? 'On' : 'Off';
+    const mappedNumbers = this.props.arrayOfNumbers.map(n => n * 2);
+    return (
+      <div>
+        <p>{this.props.text}</p>
+        <p>{this.props.number}</p>
+        <p>{isText}</p>        
+        <p>{this.props.arrayOfNumbers}</p>
+        <p>{this.props.arrayOfNumbers.join(', ')}</p>
+        <p>{mappedNumbers.join(', ')}</p>
+        <p>{this.props.objectWithInfo.size} {this.props.objectWithInfo.color}</p>
+      </div>
+    )
+  }
+}
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+        <header className="App-header">          
+          <h4> It is a component example</h4>
+          <img src={logo} className="App-logo" alt="logo"/>
+          <Text
+            arrayOfNumbers={[2, 3, 10]}
+            isActivated
+            number={2}
+            objectWithInfo={{color:'blue', size: 'big'}}
+            text="Using props"
+          />
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+![Props example](props_example.PNG)
+
 
 # 4. Conditional Render and list
 # 5. React Developer Tools
