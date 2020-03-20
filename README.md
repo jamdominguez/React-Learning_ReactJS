@@ -36,7 +36,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 - [3. Basic Concepts](#3-basic-concepts)
   - [3.1. What is JSX](#31-what-is-jsx)
   - [3.2. Components](#32-components)
-- [3.3. Props](#33-props)
+  - [3.3. Props](#33-props)
     - [Pattern to add props](#pattern-to-add-props)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
@@ -290,7 +290,7 @@ class Hello extends Component{
   }
 }
 ```
-# 3.3. Props
+## 3.3. Props
 The props let parameterize the components. Modify App.js to add a new component inside Text with a prop type number. How can check the return of the new component is wrapped with a div, by other way generate a error. Props are defined into bracers and used into bracers too **{}**.
 **The render() method must return one element**
 
@@ -376,8 +376,11 @@ class App extends Component{
 
 export default App;
 ```
+<div align="center">
 
 ![Props example](props_example.PNG)
+
+</div>
 
 
 # 4. Conditional Render and list
