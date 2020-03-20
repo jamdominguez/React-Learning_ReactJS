@@ -37,8 +37,11 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [3.1. What is JSX](#31-what-is-jsx)
   - [3.2. Components](#32-components)
   - [3.3. Props](#33-props)
-    - [Pattern to add props](#pattern-to-add-props)
-    - [Functions and Elements like props](#functions-and-elements-like-props)
+    - [Pattern to add Props](#pattern-to-add-props)
+    - [Functions and Elements like Props](#functions-and-elements-like-props)
+    - [Props's Immutability](#propss-immutability)
+    - [Default Props](#default-props)
+  - [3.4. State](#34-state)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -319,7 +322,7 @@ The boolean props not are rendered, it is possible conert it to string.
 It is possible render variables, no only props in the components.
 If a **props** is indicated **without value**, the **default value is true**, check in the code boolean2 prop.
 
-### Pattern to add props
+### Pattern to add Props
 - Each prop by line
 - Alphabetically ordered 
 
@@ -383,7 +386,7 @@ export default App;
 
 </div>
 
-### Functions and Elements like props
+### Functions and Elements like Props
 One of the more importart props that a compoenent can have is a **function**.
 When write this.props several time, the code turn complex, is typical use the restructuration:
 ```jsx
@@ -393,6 +396,7 @@ import './App.css';
 
 class Text extends Component {
   render() {    
+    // Restructuration
     const {
       arrayOfNumbers,
       isActived,
@@ -442,7 +446,7 @@ export default App;
 
 The last prop tye is the **element**. Theses element are **React Elements**
 
-```jsx
+```js
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -499,7 +503,107 @@ class App extends Component{
 
 export default App;
 ```
+### Props's Immutability
+React determine that props are inmutables, are read only (like pure functions).
+If try change the title pro value for example, get a TypeError message in exectution time (no compile time). For this reason is good practice the props restructuration.
+```js
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
 
+class Text extends Component {
+  render() {
+    //Restructuration
+    const {
+      arrayOfNumbers,
+      isActived,
+      multiply      
+    } = this.props;
+
+    this.props.title = <h4>Other tilte</h4> // try change title prop
+
+    const textBoolean = isActived ? 'Yes' : 'No';
+    const mappedNumbers = arrayOfNumbers.map(multiply).join(", ")
+    return (
+      <div>
+        {this.props.title}
+        <p>{textBoolean}</p>
+        <p>Result: {multiply(5)}</p>
+        <p>Result map: {mappedNumbers}</p>
+      </div>
+    )
+  }
+}
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+        <header className="App-header">          
+          <h4> It is a component example</h4>
+          <img src={logo} className="App-logo" alt="logo"/>
+          <Text
+            arrayOfNumbers = {[2,4,5]}
+            isActived
+            multiply={(number) => number*2}
+            title={<h1>It is a title</h1>}
+          />
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+<div align="center">
+
+![TypeError example](type_error_example.PNG)
+
+</div>
+
+### Default Props
+Some times is necessary have a default values for props, and avoid them are explicity seted, for example is use a component where is render use a prop, and this prop not is setted when te component is invoked:
+```js
+class Title extends Component {
+  render(){
+    return <h1>{this.props.text}</h1>
+  }  
+}
+
+...
+
+<Title/> //Note the prop "text" not is defined, any thing is shown
+```
+
+To assign a default props value use the keyword **defaultProps** like:
+```js
+class Title extends Component {
+  render() {
+  return <h1>{this.props.text} - {this.props.text2}</h1>
+  }
+}
+Title.defaultProps = {
+  text: 'Default Component Title',
+  text2: 'Another Default Title'
+}  
+...
+
+<Title text="Hi"/> //Now "Hi" is shown for text and default title is shown for text2 because it not is defined
+```
+If the prop is setted when the component is used, this value replace to the default prop value.
+
+Default props is the way to sure the component works if need mandatory props.
+
+## 3.4. State
 
 # 4. Conditional Render and list
 # 5. React Developer Tools

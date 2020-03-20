@@ -4,13 +4,13 @@ import './App.css';
 
 class Text extends Component {
   render() {
-    //restructuration
+    //Restructuration
     const {
       arrayOfNumbers,
       isActived,
       multiply,
       title
-    } = this.props;
+    } = this.props;  
 
     const textBoolean = isActived ? 'Yes' : 'No';
     const mappedNumbers = arrayOfNumbers.map(multiply).join(", ")
@@ -25,12 +25,22 @@ class Text extends Component {
   }
 }
 
+class Title extends Component {
+  render() {
+  return <h1>{this.props.text} - {this.props.text2}</h1>
+  }
+}
+Title.defaultProps = {
+  text: 'Default Component Title',
+  text2: 'Another Default Title'
+}  
+
 class App extends Component{
   render() { 
     return (
       <div className="App">
         <header className="App-header">          
-          <h4> It is a component example</h4>
+          <Title text="Hi"/>
           <img src={logo} className="App-logo" alt="logo"/>
           <Text
             arrayOfNumbers = {[2,4,5]}
@@ -51,5 +61,4 @@ class App extends Component{
     );
   }
 }
-
 export default App;
