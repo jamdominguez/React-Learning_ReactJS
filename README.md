@@ -42,6 +42,10 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Props's Immutability](#propss-immutability)
     - [Default Props](#default-props)
   - [3.4. State](#34-state)
+    - [How initialize a state using Class Fields](#how-initialize-a-state-using-class-fields)
+    - [Update state using setState](#update-state-using-setstate)
+    - [The state propagation](#the-state-propagation)
+    - [Initial state with props](#initial-state-with-props)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
@@ -210,16 +214,16 @@ The Visual Studio Code lintern by deault need be configured correctly to use Rea
 
 # 3. Basic Concepts
 React or ReactJS is a open source library developed in JavaScript for created user interfaces. Some React properties:
-- Declarative
-- Components based
+- Declarative: What must render but no how render it
 - Ractive programing: Changes in the component generate new renders
+- Components based
 - Virutal DOM
 - Native events abstraction
   
 The code always show "what" must render the user interface but not "how" it be renderized, the "how" is a React work.
 
 ## 3.1. What is JSX
-Is a language created by Facebook (too) that using a transpiler like [Babel](https://babeljs.io/), is he transpiler used by Create React, is converted to JavaScript.
+Is a language created by Facebook (too) that using a transpiler like [Babel](https://babeljs.io/), is the transpiler used by Create React App, is converted to JavaScript.
 
 Use Babel web page to check how JSX code is transpiler. JSX help to write the code usin React. Write code using React library without JSX is so dificulty (check in Babe).
 
@@ -604,6 +608,169 @@ If the prop is setted when the component is used, this value replace to the defa
 Default props is the way to sure the component works if need mandatory props.
 
 ## 3.4. State
+The props change the component rendering but want that component be reactive. For this work is necesary use the **state**. To add the state is necesary use the **constructor** method.
+```js
+class Count extends Component {
+  constructor(){
+    super();
+    this.state = {count:1} //initial value
+  }
+
+  render(){
+  return <span>{this.state.count}</span>
+  }
+}
+```
+### How initialize a state using Class Fields
+Eventually will be possible declare the stete out of the constructor, like a class field.
+```js
+class Count extends Component {
+  state = {count:1} //initial value
+
+  render(){
+  return <span>{this.state.count}</span>
+  }
+}
+```
+If the browser doesn't support this state declaration way, should use Babel to tranpile the code. If use create-react-app, this transformation is supported by default.
+
+### Update state using setState
+React is declarative y reactive, the state is the key for theses features.
+No must change the state the component directly, React opimize the moments when should update the component, for this reason, the state no must change with this.state="something", must use **setState()**.
+
+If try change directly the state, the Linter should warning us.
+
+```js
+class Count extends Component {
+  constructor(){
+    super();
+    this.state = {count:1} //initial value
+    setInterval(()=>this.state.count=this.state.count+1, 1000);// new state
+  }
+
+  render(){
+  return <span>{this.state.count}</span>
+  }
+}
+```
+```console
+Do not mutate state directly. Use setState()  react/no-direct-mutation-state
+```
+
+Importante:
+- The **state is inmutable**
+- To change **the state only using setState() method**
+- setState depends of React actions queue, is **asyncronous**
+
+### The state propagation
+In React the componentent state is inherited from is parent. When the parent state change produce the rendering of all his children.
+```js
+class Count extends Component {
+  constructor(){
+    super();
+    this.state = {count:1} //initial value
+    setInterval(()=> {
+      this.setState({count : this.state.count+1});
+    }, 1000);
+  }
+
+  render(){
+  return <NumberCount number={this.state.count}/>
+  }
+}
+
+class NumberCount extends Component {
+  render(){
+    return <span>{this.props.number}</span>
+  }
+}
+```
+In the above example:
+- In Count The setInterval method change the state each second
+- The state change produces the Count rendering
+- The number prop is updated with the new this.state.count value.
+- How the number prop change due the state change, produce a NumberCount render.
+
+### Initial state with props
+For this is necessary asing the initial state with a prop value. For do this must pass the props like params in the super method and contructor
+```js
+class Count extends Component {
+  constructor(props){
+    super(props);
+    this.state = {count: this.props.initialCount} //initial value
+    setInterval(()=> {
+      this.setState({count : this.state.count+1});
+    }, 1000);
+  }
+
+  render(){
+  return <NumberCount number={this.state.count}/>
+  }
+}
+```
+<div align="center">
+
+![Initial state error](initial_state_error_example.PNG)
+
+</div>
+
+Like was explined in props sections, when is necesary prop to initialize the Componente, this prop must be initialize with **defaultprops**.
+```js
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class Count extends Component {
+  constructor(props){
+    super(props);
+    console.log(this.props.initialCount)
+    this.state = {count: this.props.initialCount} //initial value
+    setInterval(()=> {
+      this.setState({count : this.state.count+1});
+    }, 1000);
+  }
+  render(){
+  return <NumberCount number={this.state.count}/>
+  }
+}
+Count.defaultProps = {
+  initialCount: 0
+}
+
+class NumberCount extends Component {
+  render(){
+    return <span>{this.props.number}</span>
+  }
+}
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+        <header className="App-header">          
+          <img src={logo} className="App-logo" alt="logo"/>
+          <Count initialCount={100}/>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </header>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+According the code above:
+- It is necessary pass the props in the constructor a super methods, if want initialize the state with a prop
+- It is necessary declare a default prop for each prop used to initialize the state
+- If use Count tag without declare initialCount, the value begin with the default value (0 in this case)
+- If use Count tag declaring initialCount, the value begint with the value pass in the tag.
 
 # 4. Conditional Render and list
 # 5. React Developer Tools
