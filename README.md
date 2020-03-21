@@ -387,7 +387,7 @@ export default App;
 </div>
 
 ### Functions and Elements like Props
-One of the more importart props that a compoenent can have is a **function**.
+One of the more important props that a component can have is a **function**.
 When write this.props several time, the code turn complex, is typical use the restructuration:
 ```jsx
 import React, { Component } from 'react';
@@ -444,7 +444,7 @@ class App extends Component{
 export default App;
 ```
 
-The last prop tye is the **element**. Theses element are **React Elements**
+The last props type are **elements**. Theses elements are **React Elements**
 
 ```js
 import React, { Component } from 'react';
@@ -505,7 +505,7 @@ export default App;
 ```
 ### Props's Immutability
 React determine that props are inmutables, are read only (like pure functions).
-If try change the title pro value for example, get a TypeError message in exectution time (no compile time). For this reason is good practice the props restructuration.
+If try change the title prop value for example, will get a TypeError message in exectution time (no compile time). For this reason is good practice the props restructuration (force set the prop to const and work with the constant).
 ```js
 import React, { Component } from 'react';
 import logo from './logo.svg';
