@@ -714,7 +714,7 @@ class Count extends Component {
 
 </div>
 
-Like was explined in props sections, when is necesary prop to initialize the Componente, this prop must be initialize with **defaultprops**.
+Like was explained in props sections, when is necesary prop to initialize the Componente, this prop must be initialize with **defaultprops**.
 ```js
 import React, { Component } from 'react';
 import logo from './logo.svg';
@@ -773,6 +773,70 @@ According the code above:
 - If use Count tag declaring initialCount, the value begint with the value pass in the tag.
 
 # 4. Conditional Render and list
+Change the render according props and state is the base to create reactive application (conditional render).
+
+In React is common work with list, check it, and render some components of the list. **Each element in the list must have a unique key**.
+
+In React is possilbe create components where according his props and current state, render different elements, it is called **conditional render**.
+
+A example creating a conditional component:
+```js
+//ConditionalSection.js
+import React, { Component } from 'react'
+
+class ComponentA extends Component {
+    render() {
+        return(
+            <p>It is the Compoenet A</p>
+        )
+    }
+}
+
+class ComponentB extends Component {
+    render() {
+        return(
+            <p>It is the Compoenet B</p>
+        )
+    }
+}
+
+function useConditionalRendering(showA) {
+    if (showA) return <ComponentA/>
+    else return <ComponentB/>
+}
+
+export default class ConditionalSection extends Component{
+    constructor() {
+        super();
+        this.state = { showA : true};
+    }
+    render() {
+        return(
+            <div>
+                <h4>Conditional Rendering</h4>
+                {useConditionalRendering(this.state.showA)}
+            </div>
+        )
+    }
+}
+```
+```js
+//App.js
+import React, { Component } from 'react';
+import ConditionalSection from './sections/ConditionalSection'
+import './App.css';
+
+class App extends Component{
+  render() { 
+    return (
+      <div className="App">
+          <ConditionalSection/>
+      </div>
+    );
+  }
+}
+export default App;
+```
 # 5. React Developer Tools
 # 6. Events and Forms
 # 7. Children and Prototypes
