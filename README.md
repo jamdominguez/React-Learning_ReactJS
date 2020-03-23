@@ -47,6 +47,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [The state propagation](#the-state-propagation)
     - [Initial state with props](#initial-state-with-props)
 - [4. Conditional Render and list](#4-conditional-render-and-list)
+  - [4.1. Conditional Rendering](#41-conditional-rendering)
+  - [4.2. Working with list](#42-working-with-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
 - [7. Children and Prototypes](#7-children-and-prototypes)
@@ -777,6 +779,7 @@ Change the render according props and state is the base to create reactive appli
 
 In React is common work with list, check it, and render some components of the list. **Each element in the list must have a unique key**.
 
+## 4.1. Conditional Rendering
 In React is possilbe create components where according his props and current state, render different elements, it is called **conditional render**.
 
 A example creating a conditional component:
@@ -837,7 +840,7 @@ class App extends Component{
 }
 export default App;
 ```
-A usefull example for conditional rendering is the login and logout section in a web page:
+A usefull example for conditional rendering is the login and logout section in a web page
 ```js
 import React, { Component } from 'react'
 
@@ -874,6 +877,66 @@ export default class ConditionalSection extends Component{
         )
     }
 }
+```
+## 4.2. Working with list
+Is usefull work with list when get information from APIs for example and we want show the data in a component.
+
+Using map function over list is possible convert the list in React element.
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class App extends Component{
+  render() { 
+    const numbers = [1,1,3,4,5];
+    return (
+      <div className="App">
+          <h4> Working with lists</h4>
+          {numbers.map(number => {
+              return <p>I am the number {number}</p>
+          })}
+      </div>
+    );
+  }
+}
+export default App;
+```
+Everything seems fine, but the browser console report a warning. **Each child in a list should have a uni "key" prop.**
+
+<div align="center">
+
+![List Error Example](list_error_example.PNG)
+
+</div>
+
+This warning is shown because to help React to indentify the elements and know which are been added, modified or removed, it is necessary user  unique key for each element in the list.
+
+To add the key the browser show anohter wwarning, the key must be unique, in this example there are two numbers "1".
+
+```js
+return <p key={number}>I am the number {number}</p>
+```
+
+<div align="center">
+
+![List Error Example 2](list_error_example2.PNG)
+
+</div>
+
+In this case, the unique value that not is repeated is the array index. Usint it, the warning dissapears.
+
+```js
+  render() { 
+    const numbers = [1,1,3,4,5];
+    return (
+      <div className="App">
+          <h4> Working with lists</h4>
+          {numbers.map((number,index) => {
+              return <p key={index}>I am the number {number}</p>
+          })}
+      </div>
+    );
+  }
 ```
 
 # 5. React Developer Tools
