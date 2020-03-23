@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 
-class ComponentA extends Component {
+class LogingButton extends Component {
     render() {
         return(
-            <p>It is the Compoenet A</p>
+            <button>Login</button>
         )
     }
 }
 
-class ComponentB extends Component {
+class LogoutButton extends Component {
     render() {
         return(
-            <p>It is the Compoenet B</p>
+            <div>
+                <p>Welcome</p>
+                <button>Logout</button>
+            </div>
         )
     }
 }
@@ -19,13 +22,13 @@ class ComponentB extends Component {
 export default class ConditionalSection extends Component{
     constructor() {
         super();
-        this.state = { showA : false};
+        this.state = { logged : false};
     }
     render() {        
         return(
             <div>
                 <h4>Conditional Rendering</h4>
-                {this.state.showA ? <ComponentA/> : <ComponentB/>}
+                {this.state.logged ? <LogoutButton/> : <LogingButton/>}
             </div>
         )
     }
