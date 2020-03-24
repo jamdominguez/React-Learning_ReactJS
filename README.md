@@ -49,6 +49,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 - [4. Conditional Render and list](#4-conditional-render-and-list)
   - [4.1. Conditional Rendering](#41-conditional-rendering)
   - [4.2. Working with list](#42-working-with-list)
+  - [4.3. Working with objects list](#43-working-with-objects-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
 - [7. Children and Prototypes](#7-children-and-prototypes)
@@ -93,7 +94,7 @@ npx create-react-app udemy-course
 
 <div align="center">
 
-![Create React App structure](create_react_app_structure_01.PNG)
+![Create React App structure](img/create_react_app_structure_01.PNG)
 
 </div>
 
@@ -188,7 +189,7 @@ Failed to compile.
 
 <div align="center">
 
-![Compiling error example](compiling_error_example.PNG)
+![Compiling error example](img/compiling_error_example.PNG)
 
 </div>
 
@@ -233,7 +234,7 @@ JSX let write HTML and JavaSciprt together. For examplo when create a element in
 
 <div align="center">
 
-![Babel JSX eample](babel_jsx_example.PNG)
+![Babel JSX eample](img/babel_jsx_example.PNG)
 
 </div>
 
@@ -388,7 +389,7 @@ export default App;
 ```
 <div align="center">
 
-![Props example](props_example.PNG)
+![Props example](img/props_example.PNG)
 
 </div>
 
@@ -572,7 +573,7 @@ export default App;
 
 <div align="center">
 
-![TypeError example](type_error_example.PNG)
+![TypeError example](img/type_error_example.PNG)
 
 </div>
 
@@ -712,7 +713,7 @@ class Count extends Component {
 ```
 <div align="center">
 
-![Initial state error](initial_state_error_example.PNG)
+![Initial state error](img/initial_state_error_example.PNG)
 
 </div>
 
@@ -905,7 +906,7 @@ Everything seems fine, but the browser console report a warning. **Each child in
 
 <div align="center">
 
-![List Error Example](list_error_example.PNG)
+![List Error Example](img/list_error_example.PNG)
 
 </div>
 
@@ -919,7 +920,7 @@ return <p key={number}>I am the number {number}</p>
 
 <div align="center">
 
-![List Error Example 2](list_error_example2.PNG)
+![List Error Example 2](img/list_error_example2.PNG)
 
 </div>
 
@@ -938,6 +939,78 @@ In this case, the unique value that not is repeated is the array index. Usint it
     );
   }
 ```
+
+## 4.3. Working with objects list
+Normally in the application the list used are objects lists. Create or get a JSON file to be red and convert it in React elements.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+import cars from './data/cars.json'
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">
+          <h4> Working with lists</h4>
+          <ul>
+            {
+              cars.map(car => {
+                return (<li key={car.id}>
+                  <strong>Name:</strong> {car.name}
+                  <strong> Company: </strong> {car.company}
+                </li>)
+              })
+            }
+          </ul>
+      </div>
+    );
+  }
+}
+export default App;
+```
+If inspect the DOM, the prop key not is rendered. Using component structure, extract the car intem in a component.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+import cars from './data/cars.json'
+
+class CarItem extends Component {
+  render(){
+    const {car} = this.props
+    return (
+        <li>
+                 <strong>Name:</strong> {car.name}
+                 <strong> Company: </strong> {car.company}
+        </li>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">
+          <h4> Working with lists</h4>
+          <ul>
+            {
+              cars.map(car => {
+               return <CarItem key={car.id} car={car}/>
+              })
+            }
+          </ul>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+Note the key must be setted in the iterator element (the map in this case). The key not is accesible from CarItem component. Key is not a prop if try access to the key inside CarItem component.
+
+If want pass the key, you must use a prop with another name like id. **The prop key must be unique and is used internally by React**.
+
 
 # 5. React Developer Tools
 # 6. Events and Forms
