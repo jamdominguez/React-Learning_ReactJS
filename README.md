@@ -1013,7 +1013,22 @@ If want pass the key, you must use a prop with another name like id. **The prop 
 
 
 # 5. React Developer Tools
+It is a key know how debuggint the application to find error and improve the performance.
+
+The React Developer Tools help in the development and maintenance process.
+
+
+[Chrome extension - React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=es). The extension project can be find in [Facebook Project - react-devtools](https://github.com/facebook/react-devtools). Lets inspect the elements react tree in any web built with React technology. The props and state is shown too.
+
+With the extension installed, if acces a web page created in React, the icon turn on available. A example page is [fotocasa](https://www.fotocasa.es/es/). If open the developer tools with F12, can check how appears new tabs, in my React Developer Tools version 2 new tabs are added:
+
+-  Component: hows you the root React components that were rendered on the page, as well as the subcomponents that they ended up rendering.
+-  Profiler: To development environment, allows you to record performance information.
+
+
 # 6. Events and Forms
+
+
 # 7. Children and Prototypes
 # 8. Components life cicle
 # 9. Good Practices
