@@ -52,6 +52,13 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [4.3. Working with objects list](#43-working-with-objects-list)
 - [5. React Developer Tools](#5-react-developer-tools)
 - [6. Events and Forms](#6-events-and-forms)
+  - [6.1. Click Event](#61-click-event)
+  - [6.2. Synthetic Events](#62-synthetic-events)
+  - [6.3. Supported Events](#63-supported-events)
+  - [6.4. Fomrs in React](#64-fomrs-in-react)
+  - [6.5. Ref attribute in JSX](#65-ref-attribute-in-jsx)
+  - [6.6. onSubmit and onChange Events](#66-onsubmit-and-onchange-events)
+  - [6.7. Controled Components](#67-controled-components)
 - [7. Children and Prototypes](#7-children-and-prototypes)
 - [8. Components life cicle](#8-components-life-cicle)
 - [9. Good Practices](#9-good-practices)
@@ -1027,7 +1034,424 @@ With the extension installed, if acces a web page created in React, the icon tur
 
 
 # 6. Events and Forms
+It is basic get the events on the components
 
+## 6.1. Click Event
+For a component execute something when click on it, is necessary set a prop called **onClick** assigning a function.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class App extends Component {  
+  render() {     
+    return (
+      <div className="App">
+        <h4>Events</h4>
+        <button onClick={() => alert('hi!')}>Click here!</button>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+It seems HTML but not is, the prop use camelCase and if inspect the DOM in the page, can check that attribute onclick no appears, because no is a HTML attribute, is a React prop. React bount the prop with the event internally
+
+## 6.2. Synthetic Events
+The function to set a element behaviour can get a param **event** like eventlistener in JavaScript.
+
+I react, the event e returned is a special event, not he native event, called synthetic event. **This synthetic event wrap the native envet to be compatible with all React browsers supported**.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class App extends Component {
+  handleClick(e) {
+    console.log(e);
+    console.log(e.nativeEvent);
+    alert('hi!')
+  }
+
+  render() {     
+    return (
+      <div className="App">
+        <h4>Events</h4>
+        <button onClick={this.handleClick}>Click here!</button>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+If for some reason, wants access to the native event, it is possible using **e.nativeEvent**.
+
+<div align="center">
+
+![Synthetic Event Example](img/synthetic_event_example.PNG)
+
+</div>
+
+## 6.3. Supported Events
+It is possible found all supported events in the [React SyntheticEvents](https://reactjs.org/docs/events.html). The events list in JavaScript is so lenght, React actually only has available the more commun and important events.
+
+For example, checking the [Mouse Events](https://reactjs.org/docs/events.html#mouse-events), test the onMouseMove event. When works with event is esential the context control, the two ways are:
+- In the constructor binding the method: **this.handleMouseMove = this.handleMouseMove.bind(this)**
+```js
+  constructor(){
+    super()
+    this.state = {mouseX: 0, mouseY: 0};
+    this.handleMouseMove = this.handleMouseMove.bind(this); // <-- binding way 1
+  }
+  handleMouseMove(e) {
+    const {clientX, clientY} = e;
+    this.setState({mouseX: clientX, mouseY: clientY});
+  }  
+```
+- Using arrow function in the class definition, this way is more cleanning that the first. Because the arrow function bind the context always where are declared. It is the recommended way.
+```js
+  constructor(){
+    super()
+    this.state = {mouseX: 0, mouseY: 0};    
+  }
+  handleMouseMove = (e) => { // <-- binding way 2
+    const {clientX, clientY} = e;
+    this.setState({mouseX: clientX, mouseY: clientY});
+  }
+```
+
+The example:
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class App extends Component {
+  constructor(){
+    super()
+    this.state = {mouseX: 0, mouseY: 0};
+    //this.handleMouseMove = this.handleMouseMove.bind(this); // <-- binding way 1    
+  }
+
+  handleMouseMove = (e) => { // <-- binding way 2 (recommended)
+    const {clientX, clientY} = e;
+    this.setState({mouseX: clientX, mouseY: clientY});
+  }
+
+  handleClick(e) {
+    console.log(e);
+    console.log(e.nativeEvent);
+    alert('hi!')
+  }
+
+  render() {     
+    return (
+      <div className="App">
+        <h4>Events</h4>
+        <button onClick={this.handleClick}>Click here!</button>
+        <div onMouseMove={this.handleMouseMove} style={{border:'1px solid #000', marginTop:'10', padding:'10'}}>
+          <p>[{this.state.mouseX},{this.state.mouseY}]</p>
+        </div>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+## 6.4. Fomrs in React
+The forms let the user report data in the application.
+
+In HTML the las form button, if not has another function specified, it will be the submit form button.
+
+To work with the form data, can recover the data with a event function (handleClick). With **e.preventDefault()** (The preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the event will not occur) avoid the button submit the information.
+
+If report the attribute **name** in un HTML element, this element value will be reported in GET action (url)
+
+A first form aproximaiton with React is the next (creatin Form component in /sections)
+
+```js
+//Form.js
+import React, { Component } from 'react'
+
+export default class Form extends Component{
+    handleClick(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const twitter = document.getElementById('twitter').value;
+        console.log({name, twitter});
+    }
+    render(){
+        return(
+            <form>
+                <p>
+                    <label>Name: </label>
+                    <input type='text' id='name' name='userName' placeholder='Enter your Name'/>
+                </p>
+                <p>
+                    <label>Twitter: </label>
+                    <input type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+                </p>
+                <button onClick={this.handleClick}>Submit</button>                
+            </form>
+        )
+    }
+}
+```
+```js
+//App.js
+import React, { Component } from 'react';
+import './App.css';
+import Form from './sections/Form'
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">
+        <h4>Forms</h4>
+          <Form/>
+      </div>
+    );
+  }
+}
+export default App;
+```
+But with React, the work with forms is different. Is use the attribute for (used to realtion a element with another) the console browser show a warning, for this reason in React must be user **htmlFor**
+
+```js
+<p>
+    <label htmlFor='name'>Name: </label>
+    <input type='text' id='name' name='userName' placeholder='Enter your Name'/>
+</p>
+<p>
+    <label htmlFor='twitter'>Twitter: </label>
+    <input type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+</p>
+```
+
+## 6.5. Ref attribute in JSX
+React has a special attribute called **ref**, and it can be added to any element. Is used to recover the element reference in the DOM. It is possible save the elements reference in the class conext using the **ref** attribute.
+
+Remember use arrow function to assign the context when in a function use the **this** key.
+
+```js
+import React, { Component } from 'react'
+
+export default class Form extends Component{
+    handleClick = (e) => {
+        e.preventDefault();
+        const name = this.inputName.value;
+        const twitter = this.inputTwitter.value;
+        console.log({name, twitter});
+    }
+    render(){
+        return(
+            <form>
+                <p>
+                    <label htmlFor='name'>Name: </label>
+                    <input ref={inputElement => this.inputName = inputElement} type='text' id='name' name='userName' placeholder='Enter your Name'/>
+                </p>
+                <p>
+                    <label htmlFor='twitter'>Twitter: </label>
+                    <input ref={inputElement => this.inputTwitter = inputElement} type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+                </p>
+                <button onClick={this.handleClick}>Submit</button>                
+            </form>
+        )
+    }
+}
+```
+User **ref** is a way to access into the component to the DOM elements but should avoid use this solution because make the code no declarative. There are another better ways to make references.
+
+## 6.6. onSubmit and onChange Events
+With React is possible too, the form envents control. The event onSubmit will be called same that the onClick on the submit button, for this reason, can change the example code. Called when the form info is submitted.
+
+If the submit button has a action, onClick, this action will be execute before that the onSubmit action.
+
+Ohther event so used is the onChange event, called when the input value change. Add a new element and assign a prop onChange with a action associated.
+
+Another events are onInput, onInvalid and onInvalid.
+
+```js
+import React, { Component } from 'react'
+
+export default class Form extends Component{
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const name = this.inputName.value;
+        const twitter = this.inputTwitter.value;
+        console.log('handleSubmit');
+        console.log({name, twitter});
+    }
+    handleClick = (e) => {
+        console.log('handleClick');
+    }
+    handleChange = (e) => {
+        console.log('handleChange');
+        console.log(e.target.checked);
+    }
+    render(){
+        return(
+            <form onSubmit={this.handleSubmit}>
+                <p>
+                    <label htmlFor='name'>Name: </label>
+                    <input ref={inputElement => this.inputName = inputElement} type='text' id='name' name='userName' placeholder='Enter your Name'/>
+                </p>
+                <p>
+                    <label htmlFor='twitter'>Twitter: </label>
+                    <input ref={inputElement => this.inputTwitter = inputElement} type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+                </p>
+                
+                <button onClick={this.handleClick}>Submit</button>                
+
+                <p><label>
+                    <input onChange={this.handleChange} ref={inputElement => this.inputTerms = inputElement} type='checkbox' id='terms' name='termsAccepted'/>
+                    Accepted terms
+                </label></p>
+            </form>
+        )
+    }
+}
+```
+
+## 6.7. Controled Components
+In this moment, we have no controled components, because we are using native way to works with forms.
+
+React provide control over components to work efficiently with forms. The form elements has internal state, and is this state wich we can use with React.
+
+It is possible assign a initial value (state) to the elements. Doing this, now not is possible change the input values, will be necessary controled it internally (Warning message appears)
+
+```js
+import React, { Component } from 'react'
+
+export default class Form extends Component{
+    constructor(){
+        super();
+        this.state = {
+            inputName: '',
+            inputTwitter: '@',
+            inputTerms: true
+        }
+    }
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const name = this.inputName.value;
+        const twitter = this.inputTwitter.value;
+        console.log('handleSubmit');
+        console.log({name, twitter});
+    }
+    handleClick = (e) => {
+        console.log('handleClick');
+    }
+    handleChange = (e) => {
+        console.log('handleChange');
+        console.log(e.target.checked);
+    }
+    render(){
+        return(
+            <form onSubmit={this.handleSubmit}>
+                <p>
+                    <label htmlFor='name'>Name: </label>
+                    <input 
+                        value={this.state.inputName} 
+                        ref={inputElement => this.inputName = inputElement} 
+                        type='text' id='name' name='userName' placeholder='Enter your Name'/>
+                </p>
+                <p>
+                    <label htmlFor='twitter'>Twitter: </label>
+                    <input 
+                        value={this.state.inputTwitter} 
+                        ref={inputElement => this.inputTwitter = inputElement} 
+                        type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+                </p>                
+                <button onClick={this.handleClick}>Submit</button>                
+                <p><label>
+                    <input 
+                        checked={this.state.inputTerms} 
+                        onChange={this.handleChange} 
+                        ref={inputElement => this.inputTerms = inputElement} 
+                        type='checkbox' id='terms' name='termsAccepted'/>
+                    Accepted terms
+                </label></p>
+            </form>
+        )
+    }
+}
+```
+
+<div align='center'>
+
+![Controled Compent Example](img/controled_componentS_example.PNG)
+
+</div>
+
+For solve it, is necessary add onChange prop to the inputs, and in this action the state must be updated. How the check box for accept the terms as a function associated with the onChange prop, is in this action where update the state.
+
+Now not is necessary access to the values directly in the handleSubmit method, because the values now are in the state stored.
+
+```js
+import React, { Component } from 'react'
+
+export default class Form extends Component{
+    constructor(){
+        super();
+        this.state = {
+            inputName: 'User',
+            inputTwitter: '@',
+            inputTerms: true
+        }
+    }
+    handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('handleSubmit');
+        console.log(this.state);
+    }
+    handleClick = (e) => {
+        console.log('handleClick');
+    }
+    handleChange = (e) => {
+        this.setState({inputTerms: e.target.checked})
+        console.log('handleChange');
+        console.log(e.target.checked);
+    }
+    render(){
+        return(
+            <form onSubmit={this.handleSubmit}>
+                <p>
+                    <label htmlFor='name'>Name: </label>
+                    <input 
+                        value={this.state.inputName} 
+                        onChange={e => this.setState({inputName: e.target.value})}
+                        ref={inputElement => this.inputName = inputElement} 
+                        type='text' id='name' name='userName' placeholder='Enter your Name'/>
+                </p>
+                <p>
+                    <label htmlFor='twitter'>Twitter: </label>
+                    <input 
+                        value={this.state.inputTwitter}
+                        onChange={e => this.setState({inputTwitter: e.target.value})}
+                        ref={inputElement => this.inputTwitter = inputElement} 
+                        type='text' id='twitter' name='twitterAccount' placeholder='Enter your Twitter acount'/>
+                </p>                
+                <button onClick={this.handleClick}>Submit</button>                
+                <p><label>
+                    <input 
+                        checked={this.state.inputTerms} 
+                        onChange={this.handleChange} 
+                        ref={inputElement => this.inputTerms = inputElement} 
+                        type='checkbox' id='terms' name='termsAccepted'/>
+                    Accepted terms
+                </label></p>
+            </form>
+        )
+    }
+}
+```
+**It is the most recommended way to works with forms in React**:
+- state: To stored the elements values
+- onChange: For the elements controled
+- setState: To update the elements values
 
 # 7. Children and Prototypes
 # 8. Components life cicle
