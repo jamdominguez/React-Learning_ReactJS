@@ -60,6 +60,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [6.6. onSubmit and onChange Events](#66-onsubmit-and-onchange-events)
   - [6.7. Controled Components](#67-controled-components)
 - [7. Children and Prototypes](#7-children-and-prototypes)
+  - [7.1. Children prop](#71-children-prop)
+  - [7.2. Prototype](#72-prototype)
 - [8. Components life cicle](#8-components-life-cicle)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
@@ -1454,6 +1456,308 @@ export default class Form extends Component{
 - setState: To update the elements values
 
 # 7. Children and Prototypes
+Children is a prop whose value is the component content, it is use to create reusable Layouts.
+
+The prototype is a way to validate the data type passed to the components.
+
+## 7.1. Children prop
+The children prop is used to create Layout or templates in the application.
+
+In the next example can see, how is rendered the same component with different content using his **this.props.children**.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class Box extends Component{
+  render(){
+    return(
+      <div style={{border: '1px solid black', margin: '5px', padding: '5px'}}>
+        {this.props.children}
+      </div>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">
+        <h4>Children props</h4>
+          <Box>Hello I am a children prop</Box>
+          <Box>Hello I am another children prop</Box>
+      </div>
+    );
+  }
+}
+export default App;
+```
+<div align='center'>
+
+![Children example](img/children_exampleA.PNG)
+
+</div>
+
+It is possible nest several component with his children because with children the components are reusable.
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class Box extends Component{
+  render(){
+    return(
+      <div style={{border: '1px solid black', margin: '5px', padding: '5px'}}>
+        {this.props.children}
+      </div>
+    )
+  }
+}
+
+class Article extends Component{
+  render(){
+    return(        
+        <section>
+          <h2>{this.props.title}</h2>
+          <p>Wrote by {this.props.author} </p>
+          <Box> {this.props.date} </Box>
+          <section>
+            {this.props.children}
+          </section>
+        </section>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">        
+          <Article 
+            author='Me' 
+            date={new Date().toLocaleDateString()} 
+            title='Article Example'>
+              <p> 
+                  This is a children example using a component inside another component
+                  and both with children
+             </p>
+             <p>
+                This is <strong> another paragragh inside the the component</strong>
+             </p>
+          </Article>
+          <Article 
+            author='Other One' 
+            date={new Date().toLocaleDateString()} 
+            title='Article Example 2'>
+              <p> 
+                  This is a children example using a component inside another component
+                  and both with children
+             </p>
+             <p>
+                This is <strong> another paragragh inside the the component</strong>
+             </p>
+          </Article>          
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+## 7.2. Prototype
+In the example, to the component Article, it is passing all props with his type.But what happen.
+
+It is interesting use conditional rendering to to avoid bad result if some prop not is reported (for example if remeove author prop).
+
+```js
+import React, { Component } from 'react';
+import './App.css';
+
+class Box extends Component{
+  render(){
+    return(
+      <div style={{border: '1px solid black', margin: '5px', padding: '5px'}}>
+        {this.props.children}
+      </div>
+    )
+  }
+}
+
+class Article extends Component{
+  constructor(props){
+    super(props);
+    if (typeof this.props.author === 'undefined'){
+      console.warn('author is required');
+      // throw new Error('author is required');
+    }
+  }
+  render(){
+    const {author, children, date, title} = this.props;
+    return(
+        <section>
+          <h2>{title}</h2>
+          {author && <p>Wrote by {author} </p>}
+          <Box> {date} </Box>
+          <section>
+            {children}
+          </section>
+        </section>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">        
+          <Article 
+            
+            date={new Date().toLocaleDateString()} 
+            title='Article Example'>
+              <p> 
+                  This is a children example using a component inside another component
+                  and both with children
+             </p>
+             <p>
+                This is <strong> another paragragh inside the the component</strong>
+             </p>
+          </Article> 
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+It is possible add a **throw new Error('error description')** to avoid the application work if a data is necessary in the avaluation.
+
+To specified the data type we can add more patchs, but it not is the right way, for the work there are **prototypes**.
+
+The prototypes are using to check the props data type. Are a external dependency, for this reason is necessary install it.
+
+```console
+npm install prop-types -SE
+```
+
+The SE param is used to specified the exact version in the package.json. Reviewing the package.json file can chek how the dependency has been added. The package.json is the file where is stored the application properties and dependencies.
+
+```js
+"prop-types": "15.7.2",
+```
+In this moment is possible add the new dependency.
+```js
+import PropTypes from 'prop-types';
+```
+To use this library must declare the map of key value where the key is the prop name and the value is the prop type for the component.
+```js
+class Article extends Component{
+  constructor(props){
+    super(props);
+    if (typeof this.props.author === 'undefined'){
+      console.warn('author is required');
+      // throw new Error('author is required');
+    }
+  }
+  render(){
+    const {author, children, date, title} = this.props;
+    return(
+        <section>
+          <h2>{title}</h2>
+          {author && <p>Wrote by {author} </p>}
+          <Box> {date} </Box>
+          <section>
+            {children}
+          </section>
+        </section>
+    )
+  }
+}
+Article.propTypes = {
+  author : PropTypes.string
+}
+```
+
+Other way is assing the type like a static module into the class (is the most used). **It is the recommended way.**
+```js
+class Article extends Component{
+  static propTypes = {
+    author : PropTypes.string
+  }
+  constructor(props){
+    super(props);
+    if (typeof this.props.author === 'undefined'){
+      console.warn('author is required');
+      // throw new Error('author is required');
+    }
+  }
+  render(){
+    const {author, children, date, title} = this.props;
+    return(
+        <section>
+          <h2>{title}</h2>
+          {author && <p>Wrote by {author} </p>}
+          <Box> {date} </Box>
+          <section>
+            {children}
+          </section>
+        </section>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    return (
+      <div className="App">        
+          <Article 
+            author={true}
+            date={new Date().toLocaleDateString()} 
+            title='Article Example'>
+              <p> 
+                  This is a children example using a component inside another component
+                  and both with children
+             </p>
+             <p>
+                This is <strong> another paragragh inside the the component</strong>
+             </p>
+          </Article> 
+      </div>
+    );
+  }
+}
+```
+
+Checking the browser console can see how a error is shown, because we are passing a boolean in this prop, and this prop is specified by PropType that is a string.
+
+<div align='center'>
+
+![Proptype error](img/proptype_error_1.PNG)
+
+</div>
+
+Too is possible specified with propTypes a prop is mandatory, for do this only must concat **isRequired** key word to the propType.
+
+```js
+  static propTypes = {
+    author : PropTypes.string.isRequired //specified author is a String and is Required
+  }
+```
+
+If remove the author prop, in this case, check the browser console can see how a error is shown, because this prop is required and not is reporte.
+
+<div align='center'>
+
+![Proptype error](img/proptype_error_2.PNG)
+
+</div>
+
+This notices type are only available in Dev environemnt, in Prod environment no.
+
+The propType library provides:
+
+- The prop type
+- If a prop is required
+
 # 8. Components life cicle
 # 9. Good Practices
 # 10. Project: Online film seeker
