@@ -63,6 +63,13 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [7.1. Children prop](#71-children-prop)
   - [7.2. Prototype](#72-prototype)
 - [8. Components life cicle](#8-components-life-cicle)
+  - [8.1. Mount](#81-mount)
+    - [constructor()](#constructor)
+    - [componentWillMount()](#componentwillmount)
+    - [render()](#render)
+    - [componentDidMount()](#componentdidmount)
+  - [8.2. Updated](#82-updated)
+  - [8.3. UnMount](#83-unmount)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
@@ -1759,6 +1766,136 @@ The propType library provides:
 - If a prop is required
 
 # 8. Components life cicle
+There are some theorical concept that most knnow to work with react:
+
+Component life cicle are the different states which a Reac component get and how can execute code in each of them. The life cicle is dividen in 3 phases.
+
+1. Mount
+2. Updated
+3. Unmount
+
+## 8.1. Mount
+- It is execute always and only one time
+- Build the component with the initial state
+- Get the props reported
+- Here is the moment/place where biding the class methods (**this.myMethod = this.myMethod.bind(this)**). Althought is more cleaning use arrow function in the method that need access to the class context
+- The method render() is execute by first time
+
+<div align='center'>
+
+![Mount Diagram](img/Mount_diagram.PNG)
+
+</div>
+
+### constructor()
+It is the first method executed. It is execute one time, init the component state and bind the method context. **Here the setState must not be called**.
+
+By the default there are a constructor() method, not is necessary declare it (like other languages like Java). By default:
+```js
+constructor(...args){
+  super(...args);
+}
+```
+A right constructor use is (note the binding no appears because is mor cleaaning binding the mehods with arrow functions):
+```js
+constructor(props){
+  super(props); //call the Component constructor
+  this.state = { //init the state
+    name : 'initName',
+    age: 18,    
+  }
+}
+```
+
+### componentWillMount()
+It is execute only one time just before that render and just after that constructor. Here is possible use setState and no produces another render. The comopnent not is available in DOM yet.
+
+The main function in this method is init the configuration and init the state. Ready all data needed for the first render.
+
+Normally this method not is so used. It used to separete constructor actions if it is son big.
+
+**In React 17 and upper, this method is deprecated, is use it, the next warning appears in the browser console. The logic into this method must be moved to the consturctor**
+
+<div align='center'>
+
+![ComponentWillMount deprecated](img/componentWillMount_deprecated.PNG)
+
+</div>
+
+### render()
+This method is called several times, always a prop is setted or the state change. Is the **unique mandatory method** in the componet. Returns the element to show in the interface.
+
+The props to use o state will be the first in the component. If this method returns null, no render anything.
+
+In the render never must called the setState method, because this would produce a infinite looping (render->changestate->render->changestate->etc). Furthermore musn't access to anything in the browser.
+
+The method render must be a "pure function". Can returns a null, string, number, elemtent or another component. To returns several elements, them must be wrapped in a div tag (if use a React version under 16).
+
+It is possible return a element list but each element need a key, because it let to React indetify them. In React version 16 and upper the restriciton to show only one element (wrapeed with div) was removed.
+```js
+return (
+  <h1 key='A'>A title</h1>,
+  <HelloRender key='B'>,
+  <HelloRender key='C'>,
+  <h3 key='D'>Another title</h3>
+)
+```
+
+### componentDidMount()
+When this method is executed, exist a element representation in DOM. It is possible listen events, perform server calls and use the setState method.
+
+It is possible subscribe browser events too, but not theses subscribtions must be removed in the method **componentWillUmMount()**.
+
+If the state is modified here, the method redner will be called again
+
+<div align='center'>
+
+![Mount Console](img/mount_console.PNG)
+
+</div>
+
+```js
+import React, { Component} from 'react';
+import './App.css';
+
+class App extends Component {
+  constructor(props){
+    console.log('constructor')
+    super(props);
+    this.state = {msg:new Date().toLocaleTimeString(), mouseX: 0, mouseY: 0};
+  }
+
+  componentDidMount(){
+    console.log('componentDidMount')    
+    document.addEventListener('click',(e)=>{ //this subscribing must be removed
+      const {clientX, clientY} = e;
+      this.setState({msg: new Date().toLocaleTimeString(), mouseX: clientX, mouseY: clientY});
+      console.log(this.state)
+    });
+  }
+
+  render(){     
+    console.log('render')
+    return (
+      <div className="App">                 
+        {this.state.msg} - ({this.state.mouseX},{this.state.mouseY})
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+
+
+## 8.2. Updated
+- It is execute always get props or the state is updated
+- This moment let controlling when the component need render again to show the changes, if no do it, the component will be rendered automatically
+
+## 8.3. UnMount
+- Remove the listener created
+- Remove references to DOM element that can be removed from the DOM
+
 # 9. Good Practices
 # 10. Project: Online film seeker
 # 11. Redux: Application's Global Manager
