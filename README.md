@@ -7,7 +7,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 
 <div align="center">
 
-![Aprendiendo ReactJS](courseIcon.PNG)<br>
+![Aprendiendo ReactJS](img/courseIcon.PNG)<br>
  [Aprendiendo ReactJS](https://www.udemy.com/course/aprendiendo-react/) by Miguel Ángel Durán García.
 
  </div>
@@ -59,9 +59,9 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [6.5. Ref attribute in JSX](#65-ref-attribute-in-jsx)
   - [6.6. onSubmit and onChange Events](#66-onsubmit-and-onchange-events)
   - [6.7. Controled Components](#67-controled-components)
-- [7. Children and Prototypes](#7-children-and-prototypes)
+- [7. Children and Proptypes](#7-children-and-proptypes)
   - [7.1. Children prop](#71-children-prop)
-  - [7.2. Prototype](#72-prototype)
+  - [7.2. Proptype](#72-proptype)
 - [8. Components life cicle](#8-components-life-cicle)
   - [8.1. Mount](#81-mount)
     - [constructor()](#constructor)
@@ -1462,10 +1462,10 @@ export default class Form extends Component{
 - onChange: For the elements controled
 - setState: To update the elements values
 
-# 7. Children and Prototypes
+# 7. Children and Proptypes
 Children is a prop whose value is the component content, it is use to create reusable Layouts.
 
-The prototype is a way to validate the data type passed to the components.
+The proptype is a way to validate the data type passed to the components.
 
 ## 7.1. Children prop
 The children prop is used to create Layout or templates in the application.
@@ -1571,7 +1571,7 @@ class App extends Component {
 export default App;
 ```
 
-## 7.2. Prototype
+## 7.2. Proptype
 In the example, to the component Article, it is passing all props with his type.But what happen.
 
 It is interesting use conditional rendering to to avoid bad result if some prop not is reported (for example if remeove author prop).
@@ -1638,9 +1638,9 @@ export default App;
 
 It is possible add a **throw new Error('error description')** to avoid the application work if a data is necessary in the avaluation.
 
-To specified the data type we can add more patchs, but it not is the right way, for the work there are **prototypes**.
+To specified the data type we can add more patchs, but it not is the right way, for the work there are **proptypes**.
 
-The prototypes are using to check the props data type. Are a external dependency, for this reason is necessary install it.
+The proptypes are using to check the props data type. Are a external dependency, for this reason is necessary install it.
 
 ```console
 npm install prop-types -SE
@@ -1831,7 +1831,7 @@ In the render never must called the setState method, because this would produce 
 
 The method render must be a "pure function". Can returns a null, string, number, elemtent or another component. To returns several elements, them must be wrapped in a div tag (if use a React version under 16).
 
-It is possible return a element list but each element need a key, because it let to React indetify them. In React version 16 and upper the restriciton to show only one element (wrapeed with div) was removed.
+**It is possible return a element list but each element need a key, because it let to React indetify them. In React version 16 and upper the restriciton to show only one element (wrapeed with div) was removed.**
 ```js
 return (
   <h1 key='A'>A title</h1>,
