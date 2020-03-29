@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 const ANIMAL_IMAGES = {
@@ -11,16 +11,21 @@ const ANIMAL_IMAGES = {
 
 const ANIMALS = Object.keys(ANIMAL_IMAGES);
 
-// This method is executed always recived new props (differents or not)
-class AnimalImage extends Component{
+/**
+ * AnimalImage
+ */
+class AnimalImage extends PureComponent{
+
     state = {src: ANIMAL_IMAGES[this.props.animal]}   
+
     componentWillReceiveProps(nextProps){
-        console.log('componentWillReceiveProps');
+        console.log('1. AnimalImage - componentWillReceiveProps');
         console.log(nextProps);        
         this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
-    } 
+    }
+
     render(){
-        console.log('AnimalImage - render');
+        console.info('3. AnimalImage - render');
         return(
             <div>
                 <p>Selected: {this.props.animal}</p>
@@ -33,18 +38,22 @@ AnimalImage.propTypes = {
     animal : PropTypes.oneOf(ANIMALS)
 }
 
+
+/**
+ * LifeCycleExample
+ */
 export default class LifeCycleExample extends Component{
-    state = {animal: 'panda'}
+
+    state = {animal: 'panda'}        
+
     renderAnimalButton = (animal) => {
-        return <button
-                    disabled={animal === this.state.animal} 
+        return <button                    
                     key={animal} 
                     onClick={() => this.setState({animal})}>{animal}
                 </button>
     }
+
     render(){
-        console.log('LifeCicleExample - render');
-        //Create buttons in programatic way
         return(
             <div>
                 <h4>LifeCicleExample</h4>

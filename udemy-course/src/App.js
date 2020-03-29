@@ -4,7 +4,7 @@ import './App.css';
 
 class App extends Component {
   render(){     
-    console.log('App - render');
+    //console.log('App - render');
     return (
       <div className="App">                 
         <LifeCycleExample />

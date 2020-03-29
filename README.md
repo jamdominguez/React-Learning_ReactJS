@@ -71,6 +71,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Fetch API](#fetch-api)
   - [8.2. Updated](#82-updated)
     - [componentWillReceiveProps(nextProps)](#componentwillreceivepropsnextprops)
+    - [shouldComponentUpdate(nextProps, nextState)](#shouldcomponentupdatenextprops-nextstate)
+    - [Pure Component](#pure-component)
   - [8.3. UnMount](#83-unmount)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
@@ -2080,6 +2082,162 @@ export default class LifeCycleExample extends Component{
 ![ComponentWillReceiveProps deprecated](img/componentWillReceiveProps_deprecated.PNG)
 
 </div>
+
+### shouldComponentUpdate(nextProps, nextState)
+If the chang comes due to props change this method be execute after componentWillReceiveProps, but if by state change this methos will be the first.
+
+**Determines if the component must be update**. No shoudl call the setState method. **Must wrapp a boolean**. 
+
+- returns true --> render will be executed
+- returns false --> render will not be executed
+
+The method recive the newProps and the newState. These and the current props and state, let us determine if the render should be executed.
+
+If this method not is implemented, by default return true.
+
+Using the last example, remove the button disabled if the prop has the same value and control the render with the method shouldComponentUpdate().
+```js
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+const ANIMAL_IMAGES = {
+    panda:'https://goo.gl/oNbtoq',
+    cat: 'https://goo.gl/PoQQXb',
+    dolphin: 'https://goo.gl/BbiKCd',
+    dog: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_xtqShfxi5i6MY0KfSllUg-Jgl11E0ZUpcRo-WJ7WoduB4g60',
+    horse: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRyKO4eVD3UMDeANQT_DNDsS9d_UlgjWsJJ_6I2TA_NewXb0DDV'
+}
+
+const ANIMALS = Object.keys(ANIMAL_IMAGES);
+
+class AnimalImage extends Component{
+    state = {src: ANIMAL_IMAGES[this.props.animal]}   
+    componentWillReceiveProps(nextProps){
+        console.log('1. AnimalImage - componentWillReceiveProps');
+        console.log(nextProps);        
+        this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+    } 
+    shouldComponentUpdate = (nextProps, nextState) => {
+        // render if the value is different
+        console.log('2. AnimalImage - shouldComponentUpdate');
+        console.log('old props', this.props);
+        console.log('new props', nextProps);        
+        return  this.props.animal !== nextProps.animal
+    }    
+    render(){
+        console.info('3. AnimalImage - render');
+        return(
+            <div>
+                <p>Selected: {this.props.animal}</p>
+                <img alt={this.props.animal} src={this.state.src} width='250'/>
+            </div>
+        )
+    }
+}
+AnimalImage.propTypes = {
+    animal : PropTypes.oneOf(ANIMALS)
+}
+
+export default class LifeCycleExample extends Component{
+    state = {animal: 'panda'}    
+    renderAnimalButton = (animal) => {
+        return <button
+                    //disabled={animal === this.state.animal} 
+                    key={animal} 
+                    onClick={() => this.setState({animal})}>{animal}
+                </button>
+    }
+
+    render(){
+        //console.log('LifeCicleExample - render');
+        //Create buttons in programatic way
+        return(
+            <div>
+                <h4>LifeCicleExample</h4>
+                {ANIMALS.map(animal => this.renderAnimalButton(animal))}
+                <AnimalImage animal={this.state.animal}/>
+            </div>
+        )
+    }
+}
+```
+The right use of this method, generate a fluid behaviour in the application. Becaouse somes rendering could be so heavy. Although with the virutal DOM, React can hand this things so good, is a good practice hand the rendering process.
+
+### Pure Component
+There is a way to do the same that with this method but without use it. The pure component immplements a different shouldComponentUpdate. This shouldComponentUpdate method return false by default if no detects superficial changes in his props or state.
+
+If extends of PureComponent can avoid implement the method shouldComponentUpdate, because by deafult it will work like we want.
+
+```js
+import React, {Component, PureComponent} from 'react';
+import PropTypes from 'prop-types';
+
+const ANIMAL_IMAGES = {
+    panda:'https://goo.gl/oNbtoq',
+    cat: 'https://goo.gl/PoQQXb',
+    dolphin: 'https://goo.gl/BbiKCd',
+    dog: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_xtqShfxi5i6MY0KfSllUg-Jgl11E0ZUpcRo-WJ7WoduB4g60',
+    horse: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRyKO4eVD3UMDeANQT_DNDsS9d_UlgjWsJJ_6I2TA_NewXb0DDV'
+}
+
+const ANIMALS = Object.keys(ANIMAL_IMAGES);
+
+/**
+ * AnimalImage
+ */
+class AnimalImage extends PureComponent{
+
+    state = {src: ANIMAL_IMAGES[this.props.animal]}   
+
+    componentWillReceiveProps(nextProps){
+        console.log('1. AnimalImage - componentWillReceiveProps');
+        console.log(nextProps);        
+        this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+    }
+
+    render(){
+        console.info('3. AnimalImage - render');
+        return(
+            <div>
+                <p>Selected: {this.props.animal}</p>
+                <img alt={this.props.animal} src={this.state.src} width='250'/>
+            </div>
+        )
+    }
+}
+AnimalImage.propTypes = {
+    animal : PropTypes.oneOf(ANIMALS)
+}
+
+
+/**
+ * LifeCycleExample
+ */
+export default class LifeCycleExample extends Component{
+
+    state = {animal: 'panda'}        
+
+    renderAnimalButton = (animal) => {
+        return <button                    
+                    key={animal} 
+                    onClick={() => this.setState({animal})}>{animal}
+                </button>
+    }
+
+    render(){
+        return(
+            <div>
+                <h4>LifeCicleExample</h4>
+                {ANIMALS.map(animal => this.renderAnimalButton(animal))}
+                <AnimalImage animal={this.state.animal}/>
+            </div>
+        )
+    }
+}
+```
+
+
+**It works well while the props and state not be complex object (no more that one level)**
 
 ## 8.3. UnMount
 - Remove the listener created
