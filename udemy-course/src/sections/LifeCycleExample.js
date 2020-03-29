@@ -1,0 +1,56 @@
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+const ANIMAL_IMAGES = {
+    panda:'https://goo.gl/oNbtoq',
+    cat: 'https://goo.gl/PoQQXb',
+    dolphin: 'https://goo.gl/BbiKCd',
+    dog: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_xtqShfxi5i6MY0KfSllUg-Jgl11E0ZUpcRo-WJ7WoduB4g60',
+    horse: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRyKO4eVD3UMDeANQT_DNDsS9d_UlgjWsJJ_6I2TA_NewXb0DDV'
+}
+
+const ANIMALS = Object.keys(ANIMAL_IMAGES);
+
+// This method is executed always recived new props (differents or not)
+class AnimalImage extends Component{
+    state = {src: ANIMAL_IMAGES[this.props.animal]}   
+    componentWillReceiveProps(nextProps){
+        console.log('componentWillReceiveProps');
+        console.log(nextProps);        
+        this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+    } 
+    render(){
+        console.log('AnimalImage - render');
+        return(
+            <div>
+                <p>Selected: {this.props.animal}</p>
+                <img alt={this.props.animal} src={this.state.src} width='250'/>
+            </div>
+        )
+    }
+}
+AnimalImage.propTypes = {
+    animal : PropTypes.oneOf(ANIMALS)
+}
+
+export default class LifeCycleExample extends Component{
+    state = {animal: 'panda'}
+    renderAnimalButton = (animal) => {
+        return <button
+                    disabled={animal === this.state.animal} 
+                    key={animal} 
+                    onClick={() => this.setState({animal})}>{animal}
+                </button>
+    }
+    render(){
+        console.log('LifeCicleExample - render');
+        //Create buttons in programatic way
+        return(
+            <div>
+                <h4>LifeCicleExample</h4>
+                {ANIMALS.map(animal => this.renderAnimalButton(animal))}
+                <AnimalImage animal={this.state.animal}/>
+            </div>
+        )
+    }
+}

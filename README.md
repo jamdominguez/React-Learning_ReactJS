@@ -62,7 +62,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 - [7. Children and Proptypes](#7-children-and-proptypes)
   - [7.1. Children prop](#71-children-prop)
   - [7.2. Proptype](#72-proptype)
-- [8. Components life cicle](#8-components-life-cicle)
+- [8. Components life cycle](#8-components-life-cycle)
   - [8.1. Mount](#81-mount)
     - [constructor()](#constructor)
     - [componentWillMount()](#componentwillmount)
@@ -70,6 +70,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [componentDidMount()](#componentdidmount)
     - [Fetch API](#fetch-api)
   - [8.2. Updated](#82-updated)
+    - [componentWillReceiveProps(nextProps)](#componentwillreceivepropsnextprops)
   - [8.3. UnMount](#83-unmount)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
@@ -1766,10 +1767,10 @@ The propType library provides:
 - The prop type
 - If a prop is required
 
-# 8. Components life cicle
+# 8. Components life cycle
 There are some theorical concept that most knnow to work with react:
 
-Component life cicle are the different states which a Reac component get and how can execute code in each of them. The life cicle is dividen in 3 phases.
+Component life cycle are the different states which a Reac component get and how can execute code in each of them. The life cycle is dividen in 3 phases.
 
 1. Mount
 2. Updated
@@ -1815,7 +1816,7 @@ The main function in this method is init the configuration and init the state. R
 
 Normally this method not is so used. It used to separete constructor actions if it is son big.
 
-**In React 17 and upper, this method is deprecated, is use it, the next warning appears in the browser console. The logic into this method must be moved to the consturctor**
+**In React 17 and upper, this method is deprecated, is use it, the next warning appears in the browser console. The logic into this method must be moved to the constructor**
 
 <div align='center'>
 
@@ -1888,7 +1889,7 @@ export default App;
 ```
 
 ### Fetch API
-The [Fetch API](https://developer.mozilla.org/es/docs/Web/API/Fetch_API) let recover resources even the net. This API is compatible with all browsers. The API manage the responses like promise.
+The [Fetch API](https://developer.mozilla.org/es/docs/Web/API/Fetch_API) let recover resources even the net. This API is compatible with all browsers. **The API manage the responses like promise**.
 
 Normally is use to request resources to a API. Must convert the response in JSON object, easy to hand in the React component.
 
@@ -1941,6 +1942,144 @@ export default class FetchExample extends Component{
 ## 8.2. Updated
 - It is execute always get props or the state is updated
 - This moment let controlling when the component need render again to show the changes, if no do it, the component will be rendered automatically
+- Update the component content
+
+<div align='center'>
+
+![Update Diagram](img/update_diagram.PNG)
+
+</div>
+
+### componentWillReceiveProps(nextProps)
+This method is execute if the component **only recives new props**, no matters if the state change. If only change the state but no recives new props, the method not will be executed.
+
+Is a usefull method when the props are used to build the state. The setState can be used here and some timnes no produces another render. This method is **executed always recived new props (differents or not)**.
+```js
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+const ANIMAL_IMAGES = {
+    cat: 'https://goo.gl/PoQQXb',
+    dolphin: 'https://goo.gl/BbiKCd',
+    panda:'https://goo.gl/oNbtoq'
+}
+
+// This method is executed always recived new props (differents or not)
+class AnimalImage extends Component{
+    state = {src: ANIMAL_IMAGES[this.props.animal]}   
+    componentWillReceiveProps(nextProps){
+        console.log('componentWillReceiveProps');
+        console.log(nextProps);        
+        this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+    } 
+    render(){
+        console.log('AnimalImage - render');
+        return(
+            <div>
+                <p>Selected: {this.props.animal}</p>
+                <img alt={this.props.animal} src={this.state.src} width='250'/>
+            </div>
+        )
+    }
+}
+AnimalImage.propTypes = {
+    animal : PropTypes.oneOf(['cat','dolphin','panda'])
+}
+AnimalImage.defaultProps = {
+    animal: 'panda'
+}
+
+export default class LifeCycleExample extends Component{
+    state = {animal: 'panda'}
+    render(){
+        console.log('LifeCycleExample - render');
+        return(
+            <div>
+                <h4>LifeCycleExample</h4>
+                <button onClick={() => this.setState({animal: 'panda'})}>Panda</button>
+                <button onClick={() => this.setState({animal: 'cat'})}>Cat</button>
+                <button onClick={() => this.setState({animal: 'dolphin'})}>Dolphin</button>
+                <AnimalImage animal={this.state.animal}/>
+            </div>
+        )
+    }
+}
+```
+
+If try no render in this method, can do this, because not is here where the rendering is decided
+```js
+if (this.props.animal !== nextProps.animal) {//no avoid the render althoung the state not change
+    console.log('setState')
+    this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+}
+```
+
+The example after refactor:
+```js
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+const ANIMAL_IMAGES = {
+    panda:'https://goo.gl/oNbtoq',
+    cat: 'https://goo.gl/PoQQXb',
+    dolphin: 'https://goo.gl/BbiKCd',
+    dog: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_xtqShfxi5i6MY0KfSllUg-Jgl11E0ZUpcRo-WJ7WoduB4g60',
+    horse: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRyKO4eVD3UMDeANQT_DNDsS9d_UlgjWsJJ_6I2TA_NewXb0DDV'
+}
+
+const ANIMALS = Object.keys(ANIMAL_IMAGES);
+
+// This method is executed always recived new props (differents or not)
+class AnimalImage extends Component{
+    state = {src: ANIMAL_IMAGES[this.props.animal]}   
+    componentWillReceiveProps(nextProps){
+        console.log('componentWillReceiveProps');
+        console.log(nextProps);        
+        this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
+    } 
+    render(){
+        console.log('AnimalImage - render');
+        return(
+            <div>
+                <p>Selected: {this.props.animal}</p>
+                <img alt={this.props.animal} src={this.state.src} width='250'/>
+            </div>
+        )
+    }
+}
+AnimalImage.propTypes = {
+    animal : PropTypes.oneOf(ANIMALS)
+}
+
+export default class LifeCycleExample extends Component{
+    state = {animal: 'panda'}
+    renderAnimalButton = (animal) => {
+        return <button
+                    disabled={animal === this.state.animal} 
+                    key={animal} 
+                    onClick={() => this.setState({animal})}>{animal}
+                </button>
+    }
+    render(){
+        console.log('LifeCycleExample - render');
+        //Create buttons in programatic way
+        return(
+            <div>
+                <h4>LifeCycleExample</h4>
+                {ANIMALS.map(animal => this.renderAnimalButton(animal))}
+                <AnimalImage animal={this.state.animal}/>
+            </div>
+        )
+    }
+}
+```
+**If check the console browser a warning appears reporting componentWillReceiveProps not should be used because is deprecated in React version upper 17. The logic must be moved to componentDidUpdate method**
+
+<div align='center'>
+
+![ComponentWillReceiveProps deprecated](img/componentWillReceiveProps_deprecated.PNG)
+
+</div>
 
 ## 8.3. UnMount
 - Remove the listener created
