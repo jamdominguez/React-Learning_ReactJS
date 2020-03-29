@@ -19,13 +19,30 @@ class AnimalImage extends PureComponent{
     state = {src: ANIMAL_IMAGES[this.props.animal]}   
 
     componentWillReceiveProps(nextProps){
+        console.clear();
         console.log('1. AnimalImage - componentWillReceiveProps');
         console.log(nextProps);        
         this.setState({src: ANIMAL_IMAGES[nextProps.animal]});            
     }
+        
+    componentWillUpdate(nextProps, nextState){
+        console.log('3. AnimalImage - componentWillUpdate');
+        console.log(nextProps, nextState)
+        const img = document.querySelector('img');        
+        img.animate([{filter: 'blur(0px)'},{filter:'blur(10px)'}],
+                    {duration: 500, easing: 'ease'});
+    }        
+
+    componentDidUpdate(prevPros, prevState){
+        console.log('4. AnimalImage - componentDidUpdate');
+        console.log(prevPros, prevState)
+        const img = document.querySelector('img');        
+        img.animate([{filter: 'blur(10px)'},{filter:'blur(0px)'}],
+                    {duration: 500, easing: 'ease'});
+    }
 
     render(){
-        console.info('3. AnimalImage - render');
+        console.info('AnimalImage - render');
         return(
             <div>
                 <p>Selected: {this.props.animal}</p>

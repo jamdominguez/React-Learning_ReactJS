@@ -73,6 +73,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [componentWillReceiveProps(nextProps)](#componentwillreceivepropsnextprops)
     - [shouldComponentUpdate(nextProps, nextState)](#shouldcomponentupdatenextprops-nextstate)
     - [Pure Component](#pure-component)
+    - [componentWillUpdate(nextProps, nextState)](#componentwillupdatenextprops-nextstate)
+    - [componentDidUpdate(prevProps, prevState)](#componentdidupdateprevprops-prevstate)
   - [8.3. UnMount](#83-unmount)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
@@ -2168,6 +2170,8 @@ There is a way to do the same that with this method but without use it. The pure
 
 If extends of PureComponent can avoid implement the method shouldComponentUpdate, because by deafult it will work like we want.
 
+If this method returns false, the cycle is end.
+
 ```js
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
@@ -2238,6 +2242,48 @@ export default class LifeCycleExample extends Component{
 
 
 **It works well while the props and state not be complex object (no more that one level)**
+
+### componentWillUpdate(nextProps, nextState)
+This method is executed just before of the render() method. This method not is so used maybe for attributes in rendering. The posibilities in this method can be performed with CSS. Is used to add animation to the components changes.
+
+In this method musn't call the setSteate because can produces a infinite looping.
+
+```js
+componentWillUpdate(nextProps, nextState){
+    console.log('3. AnimalImage - componentWillUpdate');
+    console.log(nextProps, nextState)
+    const img = document.querySelector('img');
+    img.animate([{filter: 'blur(0px)'},{filter:'blur(2px)'}],
+                {duration: 500, easing: 'ease'});
+}
+```
+
+How is logic, if the mehod shouldComponentUpdate returns false, this method not is executed. In this method can access to the DOM with the previous values because the render no arraives yet. For example, if change that panda to cat, in this moment, if get the img element form de DOM, the data wil be panda because this element no has ben rendered to cat yet.
+
+**Like componentWillMount (mount phase) and componentWillReceiveProps (update phase), this method componentWillUpdate is deprected sinde React 17 version and upper. The logic must be moved to componentDidUpdate method**. 
+
+<div align='center'>
+
+![ComponentWillUpdate Deprecated](img/componentWillUpdate_deprecated.PNG)
+
+</div>
+
+### componentDidUpdate(prevProps, prevState)
+Is execute always after a render, is used to executed exteral libraries and use the new DOM. Musn't call to setState method because can produce a infinite looping.
+
+In this method execute actions according render result.
+
+The prevProps and prevState are the props and state previous to the render.
+
+```js
+componentDidUpdate(prevPros, prevState){
+    console.log('4. AnimalImage - componentDidUpdate');
+    console.log(prevPros, prevState)
+    const img = document.querySelector('img');        
+    img.animate([{filter: 'blur(10px)'},{filter:'blur(0px)'}],
+                {duration: 500, easing: 'ease'});
+}
+```
 
 ## 8.3. UnMount
 - Remove the listener created
