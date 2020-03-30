@@ -80,6 +80,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [8.4. Error Cycle](#84-error-cycle)
     - [componentDidCatch(error,inf)](#componentdidcatcherrorinf)
 - [9. Good Practices](#9-good-practices)
+  - [9.1. Composition](#91-composition)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
@@ -2491,5 +2492,121 @@ export default class ComponentDidCatchExample extends Component {
 ```
 
 # 9. Good Practices
+## 9.1. Composition
+If the application component extends that Component class, why not use heritage instead compositon? If check the example:
+
+```js
+import React, { Component} from 'react';
+import './App.css';
+
+class Button extends Component {
+  constructor(props){
+    super(props)
+    this.borderColor = '#09f'
+  }
+
+  render(){
+    return(
+      <button style={ {borderColor: this.borderColor, display: 'block'} }>
+        {this.props.label}
+      </button>
+    )
+  }
+}
+
+class ButtonDanger extends Button {
+  constructor(props){
+    super(props)
+    this.borderColor = 'red'
+  }
+}
+
+class ButtonWithLegend extends Button {
+  render() {
+    return(
+      <div>
+        {super.render()}
+      <small> {this.props.legend} </small>
+      </div>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    //console.log('App - render');
+    return (
+      <div className="App">                 
+        <h4> Composition vs Heritage </h4>
+        <Button label='Click Me' /><br/>
+        <ButtonDanger label='Danger!' /><br/>
+        <ButtonWithLegend label='Legend' legend='It is a little legend' />
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+- The code not is so scalable
+- The code is confuse
+- Less declarative
+- Lost fo the component tree view
+
+Facebook for example, use more that 100 component in his web and never use heritage. Build the component by composition that another components. In the next exmaple can see the same code with compositon, **always use compositon to build your components**.
+
+```js
+import React, { Component} from 'react';
+import './App.css';
+
+class Button extends Component {
+  render(){
+    return(
+      <button style={ {borderColor: this.props.borderColor, display: 'block'} } title={this.props.title}>
+        {this.props.label}
+      </button>
+    )
+  }
+}
+Button.defaultProps = {
+  borderColor: '#09f'
+}
+
+class ButtonDanger extends Component {
+  render() {
+    return(
+      <Button borderColor='red' label={this.props.label} />
+    )
+  }
+}
+
+class ButtonWithLegend extends Component {
+  render() {
+    return(
+      <div>
+      <Button borderColor={this.props.borderColor} label={this.props.label} />
+      <small> {this.props.legend} </small>
+      </div>
+    )
+  }
+}
+
+class App extends Component {
+  render() {     
+    //console.log('App - render');
+    return (
+      <div className="App">                 
+        <h4> Composition vs Heritage </h4>
+        <Button label='Click Me' /><br/>
+        <ButtonDanger label='Danger!' /><br/>
+        <ButtonWithLegend label='Legend' legend='It is a little legend' borderColor='Yellow'/>
+      </div>
+    );
+  }
+}
+export default App;
+```
+
+
 # 10. Project: Online film seeker
 # 11. Redux: Application's Global Manager
