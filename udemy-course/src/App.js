@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import ComponentWillUnmountExample from './sections/ComponentWillUnmountExample'
+import ComponentDidCatchExample from './sections/ComponentDidCatchExample'
 import './App.css';
 
 class App extends Component {
@@ -7,7 +7,7 @@ class App extends Component {
     //console.log('App - render');
     return (
       <div className="App">                 
-        <ComponentWillUnmountExample />
+        <ComponentDidCatchExample />
       </div>
     );
   }

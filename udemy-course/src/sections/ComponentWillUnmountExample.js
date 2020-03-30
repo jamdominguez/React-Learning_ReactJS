@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-
-
 class ComponentToUnmont extends Component {
     state = { windowWidth: 0}
 

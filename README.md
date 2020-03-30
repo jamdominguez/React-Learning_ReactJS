@@ -77,6 +77,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [componentDidUpdate(prevProps, prevState)](#componentdidupdateprevprops-prevstate)
   - [8.3. UnMount](#83-unmount)
     - [comoponentWillUnmount()](#comoponentwillunmount)
+  - [8.4. Error Cycle](#84-error-cycle)
+    - [componentDidCatch(error,inf)](#componentdidcatcherrorinf)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
@@ -2373,6 +2375,119 @@ componentWillUnmount() {
     console.log('componentWillUnmount');
     window.removeEventListener('resize', this._updateStateWithWindowWidth)// remove listener
 }
+```
+
+## 8.4. Error Cycle
+Added in the React version 16. This phase:
+
+- Executed when a component throw a exception
+- Let management errors and exceptions
+- Catch children exception too
+
+<div align='center'>
+
+![Error Diagram](img/error_diagram.PNG)
+
+</div>
+
+
+### componentDidCatch(error,inf)
+This method recives the error and all inormation. Here it is possible modify the state (setState) for change the component behavior.
+
+How catch children exception, this method must be implemented in a upper level. Note that this method:
+
+- No catch the errors produces in event functions
+- No catch the errors in asyncronous code
+
+If a component has a no controlled error will be unmount, for this reason is importart implement this method to controll the unexpected behavior in the applications.
+
+```js
+import React, {Component} from 'react';
+
+class ButtonToThrowError extends Component {
+    state = { throwError: false }
+
+    render() {
+        if(this.state.throwError) {
+            throw new Error('Error thrown by ButtonToThrowError')
+        } else {
+            return(
+                <button onClick={() => this.setState( {throwError: true })}>Throw Error</button>
+            )
+        }
+    }
+}
+
+export default class ComponentDidCatchExample extends Component {
+    render() {
+        return(
+            <div>
+                <h4>ComponentDidCatchExample</h4>
+                <ButtonToThrowError />
+            </div>
+        )
+    }
+}
+
+```
+
+If throw a error can see it in the browser console and window. In production envrionment thee error not will appears in the window. ***"This screen is visible only in development. It will not appear if the app crashes in production. Open your browser’s developer console to further inspect this error.  Click the 'X' or hit ESC to dismiss this message"***.
+
+If close the error message in the window, can see how the component no appears because React unmount it when error happens.
+
+Modify the code to show a message when error happens (remeber close the error window in development environment). **Always must implement the method componentDidCatch to avoid React unmount the component**.
+
+```js
+import React, {Component} from 'react';
+
+class ButtonToThrowError extends Component {
+    state = { throwError: false }
+
+    render() {
+        if(this.state.throwError) {
+            throw new Error('Error thrown by ButtonToThrowError')
+        } else {
+            return(
+                <button onClick={() => this.setState( {throwError: true })}>Throw Error</button>
+            )
+        }
+    }
+}
+
+export default class ComponentDidCatchExample extends Component {
+    state = {
+        hasError: false,
+        errorMsg: ''
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.log('componentDidCatch')
+        console.log({error, errorInfo})
+        this.setState({
+            hasError: true,
+            errorMsg: error.toString()
+        })
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return(
+                <div>
+                    <p>Error happens: {this.state.errorMsg}</p>
+                    <button onClick={() => this.setState({ hasError: false})}>Recover Component</button>
+                </div>
+            )
+        } else {
+            return(
+                <div>
+                    <h4>ComponentDidCatchExample</h4>
+                    <ButtonToThrowError />
+                </div>
+            )
+        }
+    }
+}
+
 ```
 
 # 9. Good Practices
