@@ -41,6 +41,10 @@ class AnimalImage extends PureComponent{
                     {duration: 500, easing: 'ease'});
     }
 
+    componentWillUnmount(){
+        console.log('5. AnimalImage - componentWillUnmount');
+    }
+
     render(){
         console.info('AnimalImage - render');
         return(

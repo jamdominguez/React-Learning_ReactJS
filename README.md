@@ -76,6 +76,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [componentWillUpdate(nextProps, nextState)](#componentwillupdatenextprops-nextstate)
     - [componentDidUpdate(prevProps, prevState)](#componentdidupdateprevprops-prevstate)
   - [8.3. UnMount](#83-unmount)
+    - [comoponentWillUnmount()](#comoponentwillunmount)
 - [9. Good Practices](#9-good-practices)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
@@ -2286,12 +2287,93 @@ componentDidUpdate(prevPros, prevState){
 ```
 
 ## 8.3. UnMount
+This phase is executed onlye one time before the componene will be unmount, if the componenet not is rendered any more in the application
+
 - Remove the listener created
 - Remove references to DOM element that can be removed from the DOM
 
+<div align='center'>
+
+![Unmount Diagram](img/unmount_diagram.PNG)
+
+</div>
+
+### comoponentWillUnmount()
+This method is the place were:
+
+- Remove subscriptions
+- Remove listeners
+- Cancel requests
+- Release resources
+
+How in this moment the compoenent is unmounting, not should call to setState.
+
+```js
+import React, {Component} from 'react';
 
 
 
+class ComponentToUnmont extends Component {
+    state = { windowWidth: 0}
+
+    _updateStateWithWindowWidth = () => {
+        this.setState({ windowWidth: document.body.clientWidth })
+    }
+
+    componentDidMount() {
+        console.log('componentDidMount')
+        this._updateStateWithWindowWidth() //show the init width
+        window.addEventListener('resize', this._updateStateWithWindowWidth);// add listener
+    }
+
+    render() {
+        console.log('render')
+        return(
+        <p>Window width: {this.state.windowWidth}</p>
+        )
+    }
+}
+
+
+export default class ComponentWillUnmountExample extends Component {
+    state = { showComponent: true }
+
+    render() {
+        if (this.state.showComponent){
+            return(
+                <div>
+                    <h4>ComponentWillUnmountExample</h4>
+                    <ComponentToUnmont />
+                    <button onClick={() => this.setState({ showComponent: false })}>Unmount</button>
+                </div>
+            )
+        } else {
+            return(
+                <p> Component unmounted! </p>
+            )
+        }
+    }
+}
+```
+
+In the example, clicke unmount button and try resize the window, the browser console will show a error, because try setSteate over component that is unmounted. Remember taht the listener, subscripting, cancel requests and resources must be removed/released unmount the component in the method **componentWillUnmount**.
+
+<div align='center'>
+
+![ComponentWillUnmount Example](img/componentWillUnmount_example.PNG)
+
+![ComponentWillUnmount Error](img/componentWillUnmount_error.PNG)
+
+</div>
+
+To avoid it, must implement the componentWillUnmount method:
+
+```js
+componentWillUnmount() {
+    console.log('componentWillUnmount');
+    window.removeEventListener('resize', this._updateStateWithWindowWidth)// remove listener
+}
+```
 
 # 9. Good Practices
 # 10. Project: Online film seeker
