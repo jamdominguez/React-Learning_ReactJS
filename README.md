@@ -89,7 +89,11 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Container Componenent](#container-componenent)
     - [Content/Presentational Component](#contentpresentational-component)
   - [9.4.Component Strict-mode](#94component-strict-mode)
-- [10. Project: Online film seeker](#10-project-online-film-seeker)
+- [10. Project: Online films seeker](#10-project-online-films-seeker)
+  - [10.1. Intallation](#101-intallation)
+    - [Title.js (like presentational component and pure function)](#titlejs-like-presentational-component-and-pure-function)
+    - [App.css](#appcss)
+    - [SearchForm.js (like class component)](#searchformjs-like-class-component)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
 
@@ -120,6 +124,10 @@ For me are 12.16.1(Node) and 6.14.2(NPM).
 - Access to https://github.com/facebook/create-react-app where the project are stored and check the readme file to verify you have the Node and NPM version required.
 - Note that it is necesary **npx** tool. It makes easy to use CLI tools and other executables hosted on the registry.
 - To use **npx** tool it is necessary npm **5.2 or higher** and **Node 8.16.0 or Node10.16.0 or later version**.
+- To install create react app by global way:
+```console
+npm install -g create-react-app
+```
 - To intall and create a applicaton execute the next command:
 ```console
 npx create-react-app udemy-course
@@ -2928,5 +2936,96 @@ ReactDOM.render(<StrictMode><App /></StrictMode>, document.getElementById('root'
 serviceWorker.unregister();
 ```
 
-# 10. Project: Online film seeker
+**It seems that in React 17 and upper, not is necessary use this tool explicity, because we are getting warning message, with the obsolete/deprecated method.
+Using this tool no get aditional warnings.**
+
+# 10. Project: Online films seeker
+## 10.1. Intallation
+Use the next command to create de application:
+```consele
+npx create-react-app search-movies
+```
+This command creates the project folder and add all dependencies necessaries to work with React.
+
+For the CSS can use [Bulma](https://bulma.io/) framework. To install Bulma framework use the command into the project folder, the params save indicates to npm that must save it in the package.json and save-exact to be sure the curren version (8.1):
+```console
+npm install bulma --save --save-exact
+```
+
+No run the project with:
+```console
+npm run start
+```
+In firts time add the **Bulma dependency in App.js** (main class). Like React Create App use Webpack, it undestand this import.
+```js
+import 'bulma/css/bulma.css'
+```
+When create a component and set default in the export, is possible called by any name when is imported, this not is so controlled, better set a export without default.
+
+### Title.js (like presentational component and pure function)
+```js
+import React from 'react'
+
+export const Title = ({children}) => (
+    <h1 className='title'>{children}</h1>
+)
+```
+
+### App.css
+```css
+.App {
+  padding-top: 35px;
+  text-align: center;
+}
+.SearchForm-wrapper{
+  display: flex;
+  justify-content: center;
+}
+```
+
+### SearchForm.js (like class component)
+```js
+import React, {Component} from 'react'
+
+export class SearchForm extends Component {    
+    state = {
+        inputMovie: '',
+    }
+
+    _handleChange = (e) => {
+        this.setState( {inputMovie: e.target.value} )        
+    }
+
+    _handleSubmit = (e) => {
+        e.preventDefault()
+        console.log('_handleSubmit', this.state)        
+    }
+
+    render() {
+        return(
+            <form onSubmit={this._handleSubmit}> 
+                <div className="field has-addons">
+                    <div className="control">
+                        <input 
+                            className="input" 
+                            onChange={this._handleChange}
+                            placeholder={this.props.placeholder}
+                            type="text" 
+                        />
+                    </div>
+                    <div className="control">
+                        <button className="button is-info">
+                            {this.props.label}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        )
+    }
+}
+SearchForm.defaultProps = {
+    label: 'Search',
+    placeholder: 'Movie to search...'
+}
+```
 # 11. Redux: Application's Global Manager
