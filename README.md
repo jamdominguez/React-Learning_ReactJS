@@ -85,6 +85,9 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Like function](#like-function)
     - [Like constant with arrow function](#like-constant-with-arrow-function)
   - [9.2. PropTypes in stateless Components](#92-proptypes-in-stateless-components)
+  - [9.3. Container/Content Pattern](#93-containercontent-pattern)
+    - [Container Componenent](#container-componenent)
+    - [Content/Presentational Component](#contentpresentational-component)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
@@ -2728,7 +2731,7 @@ Button.propTypes = {
 }
 ```
 
-In ES2015 it is possible apply the default values for param in the function defnition, not is necessary declare defaultProps for this data type. It is possible only with **function components no with class components**.
+In ES2015 (ES6) it is possible apply the default values for param in the function defnition, not is necessary declare defaultProps for this data type. It is possible only with **function components no with class components**.
 
 ```js
 const Button = ({borderColor = 'blue', label, title}) => (
@@ -2740,6 +2743,147 @@ Button.propTypes = {
   borderColor: PropTypes.string,
   label: PropTypes.string.isRequired,
   title: PropTypes.string
+}
+```
+
+## 9.3. Container/Content Pattern
+This pattern is bassed in divide the components in two categories, **Container** and **Content**. **Using this pattern the logic is decoupled from the representation**.
+It produces the component will be more reusable.
+
+<div align='center'>
+
+![Pattern Diagram](img/pattern_diagram.PNG)
+
+</div>
+
+### Container Componenent
+- Has logic
+- Has state
+- Recover data from server
+- Performs necessary transformations
+- In the render must not define any layout
+
+### Content/Presentational Component
+- No has logic
+- No state
+- No recover data
+- Only presents
+- Show data in a layout
+- Like pure components, always recives the sames props, show the same view
+
+Example without pattern:
+```js
+import React, { Component} from 'react';
+
+export default class BitCoinPrice extends Component {
+  state = { bpi: {} }
+
+  componentDidMount(){    
+    fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
+    .then(res=>res.json())
+    .then(data=>{
+        console.log(data);
+        const {bpi} = data;
+        this.setState({bpi})
+    });
+  }
+
+  _renderCurrencies() {
+    const {bpi} = this.state;     
+    const currencies = Object.keys(bpi);
+    return currencies.map(currency=>(            
+        <div key={currency}>
+            1 BTC is {bpi[currency].rate_float}
+            <span>{currency} - {bpi[currency].description}</span>
+        </div>
+    ))
+  }
+
+  render(){    
+    return(
+        <div className="App">
+            <h4>BitCoinPrice List</h4>
+            {this._renderCurrencies()}
+        </div>
+    )        
+  }
+}
+```
+Example with pattern:
+```js
+//Container
+import React, { Component} from 'react';
+import BitCoinPricePresentational from './Presentational_Component'
+
+export default class BitCoinPriceContainer extends Component {
+  state = { bpi: {} }
+
+  componentDidMount(){    
+    fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
+    .then(res=>res.json())
+    .then(data=>{
+        console.log(data);
+        const {bpi} = data;
+        this.setState({bpi})
+    });
+  }
+
+  render(){    
+    return(
+      <BitCoinPricePresentational bpi={this.state.bpi}/>
+    )        
+  }
+}
+```
+```js
+//Presentational
+import React, { Component} from 'react';
+
+export default class BitCoinPricePresentational extends Component {
+    _renderCurrencies() {
+        const {bpi} = this.props;     
+        const currencies = Object.keys(bpi);
+        return currencies.map(currency=>(            
+            <div key={currency}>
+                1 BTC is {bpi[currency].rate_float}
+                <span>{currency} - {bpi[currency].description}</span>
+            </div>
+        ))
+      }
+
+    render() {
+        return (
+        <div className="App">
+            <h4>BitCoinPrice List</h4>
+            {this._renderCurrencies()}
+        </div>
+        )
+    }
+}
+```
+**Exercise:** Using presentational component like function:
+```js
+//Presentational like function
+import React from 'react';
+
+export default function BitCoinPricePresentational(props) {
+    function _renderCurrencies() {
+        const {bpi} = props;     
+        const currencies = Object.keys(bpi);
+        return currencies.map(currency=>(            
+            <div key={currency}>
+                1 BTC is {bpi[currency].rate_float}
+                <span>{currency} - {bpi[currency].description}</span>
+            </div>
+        ));
+      };
+    
+    return (
+    <div>
+        <h4>BitCoinPrice List</h4>
+        {_renderCurrencies()}
+    </div>
+    )    
 }
 ```
 
