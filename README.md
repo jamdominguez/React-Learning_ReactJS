@@ -81,6 +81,10 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [componentDidCatch(error,inf)](#componentdidcatcherrorinf)
 - [9. Good Practices](#9-good-practices)
   - [9.1. Composition](#91-composition)
+  - [9.2. Stateless Components](#92-stateless-components)
+    - [Like function](#like-function)
+    - [Like constant with arrow function](#like-constant-with-arrow-function)
+  - [9.2. PropTypes in stateless Components](#92-proptypes-in-stateless-components)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
@@ -2607,6 +2611,137 @@ class App extends Component {
 export default App;
 ```
 
+## 9.2. Stateless Components
+Normally use class to create component. There are another ways with some advantages and limitations.
+
+**If have class components without state or life cycle methods**, it is possible pass it like function or constant with arrow function.
+
+### Like function
+
+class mode
+```js
+class Article extends Component {
+  render() {
+    return(
+      <section>
+        <h2>{this.props.title}</h2>
+        <p><em> Wrote by {this.props.author}</em></p>
+        <span>{this.props.date}</span>
+        <article>
+          {this.props.children}
+        </article>
+      </section>
+    )
+  }
+}
+```
+
+function mode
+```js
+function Article(props) {
+  return(
+    <section>
+      <h2>{props.title}</h2>
+      <p><em> Wrote by {props.author}</em></p>
+      <span>{props.date}</span>
+      <article>
+        {props.children}
+      </article>
+    </section>
+  )
+}
+```
+
+This compoent kind is a stateless component, because haven't internal state
+
+### Like constant with arrow function
+class mode
+```js
+class Button extends Component {
+  render() {
+    return(
+      <button style={ {borderColor: this.props.borderColor, display: 'block'} } title={this.props.title}>
+        {this.props.label}
+      </button>
+    )
+  }
+}
+```
+
+like constant with arrow function
+```js
+const Button = (props) => (
+    <button style={ {borderColor: props.borderColor, display: 'block'} } title={props.title}>
+      {props.label}
+    </button>
+  )
+```
+
+## 9.2. PropTypes in stateless Components
+Wint pure component functions is possible too use proptypes. Applying to the last example:
+```js
+function Article(props) {
+  return(
+    <section>
+      <h2>{props.title}</h2>
+      <p><em> Wrote by {props.author}</em></p>
+      <span>{props.date}</span>
+      <article>
+        {props.children}
+      </article>
+    </section>
+  )
+}
+Article.propTypes = {
+  author: PropTypes.string.isRequired,
+  children: PropTypes.any,
+  date: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+}
+```
+
+If change the prop recived by Article from string to number and remove the date prop, getting the next errors in the browser console.
+
+<div align='center'>
+
+![PropTypes Error](img/proptype_error_3.PNG)
+
+</div>
+
+Because is specified with PropTypes that **author** and **date** are required and must be a string.
+
+Can do the same with the other component, and added defaultProps too. You can apply this change and modified the code to get the errors:
+
+```js
+const Button = (props) => (
+  <button style={ {borderColor: props.borderColor, display: 'block'} } title={props.title}>
+    {props.label}
+  </button>
+)
+Button.defaultProps = {
+  borderColor: 'blue'
+}
+Button.propTypes = {
+  borderColor: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  title: PropTypes.string
+}
+```
+
+In ES2015 it is possible apply the default values for param in the function defnition, not is necessary declare defaultProps for this data type. It is possible only with **function components no with class components**.
+
+```js
+const Button = ({borderColor = 'blue', label, title}) => (
+  <button style={ {borderColor: borderColor, display: 'block'} } title={title}>
+    {label}
+  </button>
+)
+Button.propTypes = {
+  borderColor: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  title: PropTypes.string
+}
+```
 
 # 10. Project: Online film seeker
 # 11. Redux: Application's Global Manager
