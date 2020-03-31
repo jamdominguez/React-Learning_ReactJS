@@ -88,6 +88,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [9.3. Container/Content Pattern](#93-containercontent-pattern)
     - [Container Componenent](#container-componenent)
     - [Content/Presentational Component](#contentpresentational-component)
+  - [9.4.Component Strict-mode](#94component-strict-mode)
 - [10. Project: Online film seeker](#10-project-online-film-seeker)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
@@ -2885,6 +2886,46 @@ export default function BitCoinPricePresentational(props) {
     </div>
     )    
 }
+```
+
+## 9.4.Component Strict-mode
+This Component is available from React 16.3. **StrictMode** t is a tool used to detect potential problems in the application.
+This tool render anything and actives aditional warnings and checking for his decendents.
+
+To use this tool, from the enter application point where have the root component and import the component from React library. In this point, wrapp the roo compoenent with the
+StrictMode component.
+
+To check the StrictMode evalutations must see the browser console. This component only works in development environment, in production environment no produces any warning.
+
+Without StrictMode
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+```
+With StrictMode
+```js
+import React, { StrictMode } from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(<StrictMode><App /></StrictMode>, document.getElementById('root'));
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
 ```
 
 # 10. Project: Online film seeker

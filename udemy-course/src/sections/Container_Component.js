@@ -7,8 +7,7 @@ export default class BitCoinPriceContainer extends Component {
   componentDidMount(){    
     fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
     .then(res=>res.json())
-    .then(data=>{
-        console.log(data);
+    .then(data=>{        
         const {bpi} = data;
         this.setState({bpi})
     });
