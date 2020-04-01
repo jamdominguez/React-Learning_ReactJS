@@ -93,6 +93,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [10.1. Intallation](#101-intallation)
     - [Building firs components](#building-firs-components)
     - [API call](#api-call)
+    - [Card listing](#card-listing)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
 
@@ -3147,4 +3148,113 @@ SearchForm.defaultProps = {
     placeholder: 'Movie to search...'
 }
 ```
+
+### Card listing
+Using Bulma framkework exist a view component **Card** can be used to show the movies results.
+It is possible divide the elements in differents reusable components like Movie and MoviesList.
+It allow the application be more scalable. 
+
+```js
+// App.js
+import React, { Component } from 'react';
+import { Title } from './components/Title'
+import { SearchForm } from './components/SearchForm'
+import { MoviesList } from './components/MoviesList';
+import './App.css';
+import 'bulma/css/bulma.css'
+
+class App extends Component{
+  state = {
+    results: []
+  }
+
+  _handleResults = (results) => {
+    this.setState({ results })   
+  }
+  render() {        
+    return (
+      <div className="App">
+        <Title>Search Movies</Title>
+        <div className='SearchForm-wrapper'>
+          <SearchForm onResults={this._handleResults}/>
+        </div>
+        {this.state.results.length === 0 ? <p>No results</p> : <MoviesList movies={this.state.results} />} 
+      </div>
+    );
+  }
+}
+
+export default App;
+``` 
+
+```js
+// Movie.js (like presentational component)
+import React from 'react'
+
+export const Movie = (props) => {    
+    return(
+        <div className="card">
+            <div className="card-image">
+                <figure className="image">
+                    <img src={props.poster} alt={props.title}/>
+                </figure>
+            </div>
+            <div className="card-content">
+                <div className="media">
+                    <div className="media-content">
+                        <p className="title is-4">{props.title}</p>
+                        <p className="subtitle is-6">{props.year}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+``` 
+
+```js
+// MoviesList.js (like presentational component)
+import React from 'react'
+import { Movie } from './Movie'
+
+export const MoviesList = (props) => {
+    const { movies }  = props        
+    return(
+        <div className='MoviesList'>
+            {movies.map(movie => {
+                return(
+                    <div key={movie.imdbID} className='MoviesList-item'>
+                        <Movie                          
+                        poster={movie.Poster}
+                        title={movie.Title} 
+                        year={movie.Year} 
+                        ></Movie>
+                    </div>)})}
+        </div>
+    )
+}
+``` 
+And add new class to css
+
+```css
+.App {
+  padding-top: 35px;
+  text-align: center;
+}
+.SearchForm-wrapper{
+  display: flex;
+  justify-content: center;
+}
+.MoviesList{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px
+}
+.MoviesList-item{
+  margin-bottom: 25px;
+  width: 45%;
+}
+``` 
+
 # 11. Redux: Application's Global Manager
