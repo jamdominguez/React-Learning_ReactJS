@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 
+const API_KEY = '6e290af'
+const API_END_POINT = `http://www.omdbapi.com/?apikey=${API_KEY}`
+
 export class SearchForm extends Component {    
     state = {
         inputMovie: '',
@@ -10,11 +13,17 @@ export class SearchForm extends Component {
     }
 
     _handleSubmit = (e) => {
-        e.preventDefault()
-        console.log('_handleSubmit', this.state)        
+        e.preventDefault()        
+        fetch(`${API_END_POINT}&s=${this.state.inputMovie}`)
+        .then(res => res.json())
+        .then(data =>{
+            console.log(this.state.inputMovie, data)
+            const { Search, Response} = data            
+            Response === 'True' ? this.props.onResults(Search) : this.props.onResults([])           
+        })
     }
 
-    render() {
+    render() {        
         return(
             <form onSubmit={this._handleSubmit}> 
                 <div className="field has-addons">

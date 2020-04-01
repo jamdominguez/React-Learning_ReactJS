@@ -91,9 +91,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [9.4.Component Strict-mode](#94component-strict-mode)
 - [10. Project: Online films seeker](#10-project-online-films-seeker)
   - [10.1. Intallation](#101-intallation)
-    - [Title.js (like presentational component and pure function)](#titlejs-like-presentational-component-and-pure-function)
-    - [App.css](#appcss)
-    - [SearchForm.js (like class component)](#searchformjs-like-class-component)
+    - [Building firs components](#building-firs-components)
+    - [API call](#api-call)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
 
@@ -2962,16 +2961,10 @@ import 'bulma/css/bulma.css'
 ```
 When create a component and set default in the export, is possible called by any name when is imported, this not is so controlled, better set a export without default.
 
-### Title.js (like presentational component and pure function)
-```js
-import React from 'react'
+### Building firs components
 
-export const Title = ({children}) => (
-    <h1 className='title'>{children}</h1>
-)
-```
+In App.css:
 
-### App.css
 ```css
 .App {
   padding-top: 35px;
@@ -2983,8 +2976,19 @@ export const Title = ({children}) => (
 }
 ```
 
-### SearchForm.js (like class component)
+In components folder:
+
 ```js
+//Title.js (like presentational component and pure function)
+import React from 'react'
+
+export const Title = ({children}) => (
+    <h1 className='title'>{children}</h1>
+)
+```
+
+```js
+//SearchForm.js (like class component)
 import React, {Component} from 'react'
 
 export class SearchForm extends Component {    
@@ -3002,6 +3006,121 @@ export class SearchForm extends Component {
     }
 
     render() {
+        return(
+            <form onSubmit={this._handleSubmit}> 
+                <div className="field has-addons">
+                    <div className="control">
+                        <input 
+                            className="input" 
+                            onChange={this._handleChange}
+                            placeholder={this.props.placeholder}
+                            type="text" 
+                        />
+                    </div>
+                    <div className="control">
+                        <button className="button is-info">
+                            {this.props.label}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        )
+    }
+}
+SearchForm.defaultProps = {
+    label: 'Search',
+    placeholder: 'Movie to search...'
+}
+```
+
+### API call
+
+To get the movies information can use [OMDB API](http://www.omdbapi.com/). T call this API is necessary get a key. To get a free API key go to [API Key](http://www.omdbapi.com/apikey.aspx) and request a free key.
+
+Complete the form, submit it, activate your key from the email recived and get the api key from the example in the email recived body.
+
+<div align='center'>
+
+![OMDB API Key](img/omdb_api_key.PNG)
+
+</div>
+
+There are two endpoints (movies info and movies posters)
+```console
+http://www.omdbapi.com/?apikey=[yourkey]&
+http://img.omdbapi.com/?apikey=[yourkey]&
+```
+
+Like the documentation, for search a movie like name it is necessary use the para **t** added to the call. The api key must be added to the call in the param **apikey**.
+
+It is possible get in App.js the SearchForm results passing a function, that update the App state, like SearchForm prop.
+
+```js
+//App.js
+import React, { Component } from 'react';
+import { Title } from './components/Title'
+import { SearchForm } from './components/SearchForm'
+import './App.css';
+import 'bulma/css/bulma.css'
+
+class App extends Component{
+  state = {
+    results: []
+  }
+
+  _handleResults = (results) => {
+    this.setState({ results })
+  }
+
+  _renderResults() {
+    const { results }  = this.state    
+    return results.map(movie => <p key={movie.imdbID}>{movie.Title} {movie.Year}</p>)    
+  }
+
+  render() {    
+    return (
+      <div className="App">
+        <Title>Search Movies</Title>
+        <div className='SearchForm-wrapper'>
+          <SearchForm onResults={this._handleResults}/>
+        </div>
+        {this.state.results.length === 0 ? <p>No results</p> : this._renderResults()}
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+```js
+//SearchForm.js
+import React, {Component} from 'react'
+
+const API_KEY = '6e290af'
+const API_END_POINT = `http://www.omdbapi.com/?apikey=${API_KEY}`
+
+export class SearchForm extends Component {    
+    state = {
+        inputMovie: '',
+    }
+
+    _handleChange = (e) => {
+        this.setState( {inputMovie: e.target.value} )        
+    }
+
+    _handleSubmit = (e) => {
+        e.preventDefault()        
+        fetch(`${API_END_POINT}&s=${this.state.inputMovie}`)
+        .then(res => res.json())
+        .then(data =>{
+            console.log(this.state.inputMovie, data)
+            const { Search, Response} = data            
+            Response === 'True' ? this.props.onResults(Search) : this.props.onResults([])           
+        })
+    }
+
+    render() {        
         return(
             <form onSubmit={this._handleSubmit}> 
                 <div className="field has-addons">
