@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { ButtonBackToHome } from '../components/ButtonBackToHome'
 import PropTypes from 'prop-types'
 
 const API_KEY = '6e290af'
@@ -33,7 +33,7 @@ export class Detail extends Component {
         const { Title, Poster, Actors, Metascore, Plot } = this.state.movie
         return(
             <div>
-                <Link to={'/'} className='button is-info'>Go Home</Link>
+                <ButtonBackToHome />
                 <h1 className='title'>{Title}</h1>
                 <img src={Poster} alt={Title}/>
                 <h3 className='subtitle'>{Actors}</h3>

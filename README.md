@@ -97,6 +97,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [10.5. Routing with React](#105-routing-with-react)
     - [Routing with JavaScritp native API](#routing-with-javascritp-native-api)
     - [SPA](#spa)
+  - [10.6. Page 404](#106-page-404)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
 
@@ -3603,5 +3604,51 @@ New components used from react-routing-dom library:
 - import { **BrowserRouter** } from 'react-router-dom': Allow the application navigation like SPA
 - import { **Switch, Route** } from 'react-router-dom': Allow the components swicth (Switch) and the relation betwen route and component (Route)
 - import { **Link** } from 'react-router-dom': Allow change the route, and this produce render the related component
+
+## 10.6. Page 404
+When try access to a page that not exist, appears a blank web page. We can fix it using routing so easy.
+
+For it create a new comnponent NotFound like the next and add this component (importing it before) like a Rout without path in App.js:
+
+```js
+// NotFound.js
+import React from 'react'
+import { ButtonBackToHome } from '../components/ButtonBackToHome'
+
+export const NotFound = () => {
+    return(
+        <div>
+            <h1 className='title'>404</h1>
+            <h2 className='subtitle'>Page not found</h2>
+            <ButtonBackToHome />
+        </div>
+    )
+}
+```
+```js
+// App.js
+import { NotFound } from './pages/NotFound'
+
+...
+
+          <Switch>
+            <Route exact path='/' component={Home}/>
+            <Route exact path='/detail/:id' component={Detail}/>
+            <Route component={NotFound}/>
+          </Switch>  
+```
+
+Can refactor de button to back home in a component like ButtonBackToHome and add it in the new component NotFound and replace the Go Home button in Detail by this new component ButtonBackToHome.
+```js
+// ButtonBackToHome.js
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+export const ButtonBackToHome = () => {
+    return(
+        <Link to={'/'} className='button is-info'>Go Home</Link>
+    )
+}
+```
 
 # 11. Redux: Application's Global Manager
