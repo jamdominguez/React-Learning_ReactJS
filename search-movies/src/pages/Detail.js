@@ -1,15 +1,27 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const API_KEY = '6e290af'
 const API_END_POINT = `http://www.omdbapi.com/?apikey=${API_KEY}`
 
 export class Detail extends Component {
+    static propTypes = {
+        match: PropTypes.shape({
+            params: PropTypes.object,
+            isExact: PropTypes.bool,
+            path: PropTypes.string,
+            url: PropTypes.string
+        })
+    }
     state = {
         movie: {}
     }
 
     componentDidMount() {
-        fetch(`${API_END_POINT}&i=${this.props.id}`)
+        console.log('routing inyection',this.props)
+        const { id } = this.props.match.params
+        fetch(`${API_END_POINT}&i=${id}`)
         .then(res => res.json())
         .then(movie => {
           console.log(movie)
@@ -17,18 +29,14 @@ export class Detail extends Component {
         })
     }
 
-    _goBack() {
-        window.history.back()
-    }
-
     render() {
         const { Title, Poster, Actors, Metascore, Plot } = this.state.movie
         return(
             <div>
-                <button onClick={this._goBack}>Go Back</button>
-                <h1>{Title}</h1>
+                <Link to={'/'} className='button is-info'>Go Home</Link>
+                <h1 className='title'>{Title}</h1>
                 <img src={Poster} alt={Title}/>
-                <h3>{Actors}</h3>
+                <h3 className='subtitle'>{Actors}</h3>
                 <span>{Metascore}</span>
                 <p>{Plot}</p>
             </div>

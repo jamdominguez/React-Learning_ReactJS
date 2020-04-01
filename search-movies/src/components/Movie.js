@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export const Movie = (props) => { 
     const { id, poster, title, year} = props  
     return(
-        <a href={`?id=${id}`}className="card">
+        <Link to={`/detail/${id}`}className="card">
             <div className="card-image">
                 <figure className="image">
                     <img src={poster} alt={title}/>
@@ -17,6 +18,6 @@ export const Movie = (props) => {
                     </div>
                 </div>
             </div>
-        </a>
+        </Link>
     )
 }

@@ -91,11 +91,13 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [9.4.Component Strict-mode](#94component-strict-mode)
 - [10. Project: Online films seeker](#10-project-online-films-seeker)
   - [10.1. Intallation](#101-intallation)
-    - [Building firs components](#building-firs-components)
-    - [API call](#api-call)
-    - [Card listing](#card-listing)
+  - [10.2. Building firs components](#102-building-firs-components)
+  - [10.3. API call](#103-api-call)
+  - [10.4.  Card listing](#104-card-listing)
+  - [10.5. Routing with React](#105-routing-with-react)
+    - [Routing with JavaScritp native API](#routing-with-javascritp-native-api)
+    - [SPA](#spa)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
-  - [11.1. Routing with React](#111-routing-with-react)
 
 
 # 1. Introduction
@@ -2963,7 +2965,7 @@ import 'bulma/css/bulma.css'
 ```
 When create a component and set default in the export, is possible called by any name when is imported, this not is so controlled, better set a export without default.
 
-### Building firs components
+## 10.2. Building firs components
 
 In App.css:
 
@@ -3035,7 +3037,7 @@ SearchForm.defaultProps = {
 }
 ```
 
-### API call
+## 10.3. API call
 
 To get the movies information can use [OMDB API](http://www.omdbapi.com/). T call this API is necessary get a key. To get a free API key go to [API Key](http://www.omdbapi.com/apikey.aspx) and request a free key.
 
@@ -3150,7 +3152,7 @@ SearchForm.defaultProps = {
 }
 ```
 
-### Card listing
+## 10.4.  Card listing
 Using Bulma framkework exist a view component **Card** can be used to show the movies results.
 It is possible divide the elements in differents reusable components like Movie and MoviesList.
 It allow the application be more scalable. 
@@ -3320,12 +3322,12 @@ _handleSubmit = (e) => {
 }
 ```
 
-# 11. Redux: Application's Global Manager
-## 11.1. Routing with React
+## 10.5. Routing with React
 In this point we check how pass of the several pages applicatoin to a single page application using React.
 
 It is necessary indicates to App component that the render depends that the route.
 
+### Routing with JavaScritp native API
 First time use the JavaScirpt navite API with conditional render
 ```js
 // App.js
@@ -3455,3 +3457,151 @@ export class Home extends Component {
         }
 }
 ```
+
+### SPA
+A single page application allows a fluid and quick navigation.
+
+In this point we get:
+- The application will be a SPA
+- The routes will be declaratives
+
+the library [react-router](https://reacttraining.com/react-router/) is the mos famous library to create routes with React. We are interesting in web dynamic routing. Routes will be change according the application is rendering, so theses routes will be components too.
+
+To install de library:
+```console
+npm install react-router-dom
+```
+Now is necessary wrapp the application with the routing type in the index.js file with the **BrowserRouter** component.
+```js
+// index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom'
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+```
+
+It is necessary update the components too. Now replace the imperative declaration for routing to declarative declarationfor routing.
+
+In App.js it is necessary add the navagation and components relaed with the route. Use the **Switch** and **Route** components.
+```js
+// App.js
+import React, { Component } from 'react';
+import { Detail } from './pages/Detail'
+import { Home } from './pages/Home'
+import { Switch, Route } from 'react-router-dom'
+import './App.css';
+import 'bulma/css/bulma.css'
+
+class App extends Component{
+  render() {        
+      return (
+        <div className="App">
+          <Switch>
+            <Route exact path='/' component={Home}/>
+            <Route exact path='/detail/:id' component={Detail}/>
+          </Switch>          
+        </div>
+      );    
+  }
+}
+
+export default App;
+```
+In Movie.js change the anchor element to **Link** component. Here the "src" attribute is changed by "to" prop to indicate the new route. When click on the Link component the route will be change to the value reported and it produce the component change and render related with the route/path specified in the App.js.
+```js
+// Movie.js
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+export const Movie = (props) => { 
+    const { id, poster, title, year} = props  
+    return(
+        <Link to={`/detail/${id}`}className="card">
+            <div className="card-image">
+                <figure className="image">
+                    <img src={poster} alt={title}/>
+                </figure>
+            </div>
+            <div className="card-content">
+                <div className="media">
+                    <div className="media-content">
+                        <p className="title is-4">{title}</p>
+                        <p className="subtitle is-6">{year}</p>
+                    </div>
+                </div>
+            </div>
+        </Link>
+    )
+}
+```
+In Detail.js the Go Back button must be change by a **Link** component and called Go Hombe, because here must be specified the Home componet route ("/"). Furthermore, now this component will recived new props from Movie Link component, from this props must be gotten the movie id.
+```js
+// Detail.js
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+
+const API_KEY = '6e290af'
+const API_END_POINT = `http://www.omdbapi.com/?apikey=${API_KEY}`
+
+export class Detail extends Component {
+    static propTypes = {
+        match: PropTypes.shape({
+            params: PropTypes.object,
+            isExact: PropTypes.bool,
+            path: PropTypes.string,
+            url: PropTypes.string
+        })
+    }
+    state = {
+        movie: {}
+    }
+
+    componentDidMount() {
+        console.log('routing inyection',this.props)
+        const { id } = this.props.match.params
+        fetch(`${API_END_POINT}&i=${id}`)
+        .then(res => res.json())
+        .then(movie => {
+          console.log(movie)
+          this.setState({ movie })
+        })
+    }
+
+    render() {
+        const { Title, Poster, Actors, Metascore, Plot } = this.state.movie
+        return(
+            <div>
+                <Link to={'/'} className='button is-info'>Go Home</Link>
+                <h1 className='title'>{Title}</h1>
+                <img src={Poster} alt={Title}/>
+                <h3 className='subtitle'>{Actors}</h3>
+                <span>{Metascore}</span>
+                <p>{Plot}</p>
+            </div>
+        )
+    }
+}
+``` 
+New components used from react-routing-dom library:
+- import { **BrowserRouter** } from 'react-router-dom': Allow the application navigation like SPA
+- import { **Switch, Route** } from 'react-router-dom': Allow the components swicth (Switch) and the relation betwen route and component (Route)
+- import { **Link** } from 'react-router-dom': Allow change the route, and this produce render the related component
+
+# 11. Redux: Application's Global Manager

@@ -13,8 +13,7 @@ export class SearchForm extends Component {
     }
 
     _handleSubmit = (e) => {
-        e.preventDefault()        
-        console.log(`inputMovie: ${this.state.inputMovie}`)
+        e.preventDefault()                
         fetch(`${API_END_POINT}&s=${this.state.inputMovie}`)
         .then(res => res.json())
         .then(data =>{
@@ -24,8 +23,7 @@ export class SearchForm extends Component {
         })
     }
 
-    render() {        
-        console.log('--> render search', this.state.inputMovie)
+    render() {                
         return(
             <form onSubmit={this._handleSubmit}> 
                 <div className="field has-addons">
@@ -34,7 +32,7 @@ export class SearchForm extends Component {
                             className="input" 
                             onChange={this._handleChange}
                             placeholder={this.props.placeholder}
-                            type="text" 
+                            type="text"                            
                         />
                     </div>
                     <div className="control">
