@@ -14,16 +14,18 @@ export class SearchForm extends Component {
 
     _handleSubmit = (e) => {
         e.preventDefault()        
+        console.log(`inputMovie: ${this.state.inputMovie}`)
         fetch(`${API_END_POINT}&s=${this.state.inputMovie}`)
         .then(res => res.json())
         .then(data =>{
-            console.log(this.state.inputMovie, data)
+            console.log(data)
             const { Search = [] } = data  //default value for Search thanks to ES6          
             this.props.onResults(Search)
         })
     }
 
     render() {        
+        console.log('--> render search', this.state.inputMovie)
         return(
             <form onSubmit={this._handleSubmit}> 
                 <div className="field has-addons">
