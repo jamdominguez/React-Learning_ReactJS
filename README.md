@@ -95,6 +95,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [API call](#api-call)
     - [Card listing](#card-listing)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
+  - [11.1. Routing with React](#111-routing-with-react)
 
 
 # 1. Introduction
@@ -3320,3 +3321,70 @@ _handleSubmit = (e) => {
 ```
 
 # 11. Redux: Application's Global Manager
+## 11.1. Routing with React
+In this point we check how pass of the several pages applicatoin to a single page application using React.
+
+It is necessary indicates to App component that the render depends that the route.
+
+First time use the JavaScirpt navite API with conditional render
+```js
+// App.js
+  render() {        
+    const url = new URL(document.location)
+    const hasId = url.searchParams.has('id')
+    if (hasId){
+      const id = url.searchParams.get('id');
+      return <Detail id={id}/>
+    }
+    return (
+      <div className="App">
+        <Title>Search Movies</Title>
+        <div className='SearchForm-wrapper'>
+          <SearchForm onResults={this._handleResults}/>
+        </div>
+        {this.state.usedSearch ? this._renderResults() : <small> Use the form to search a movie </small>}    
+      </div>
+    );
+  }
+```
+
+```js
+// Detail.js
+import React, { Component } from 'react'
+
+const API_KEY = '6e290af'
+const API_END_POINT = `http://www.omdbapi.com/?apikey=${API_KEY}`
+
+export class Detail extends Component {
+    state = {
+        movie: {}
+    }
+
+    componentDidMount() {
+        fetch(`${API_END_POINT}&i=${this.props.id}`)
+        .then(res => res.json())
+        .then(movie => {
+          console.log(movie)
+          this.setState({ movie })
+        })
+    }
+
+    _goBack() {
+        window.history.back()
+    }
+
+    render() {
+        const { Title, Poster, Actors, Metascore, Plot } = this.state.movie
+        return(
+            <div>
+                <button onClick={this._goBack}>Go Back</button>
+                <h1>{Title}</h1>
+                <img src={Poster} alt={Title}/>
+                <h3>{Actors}</h3>
+                <span>{Metascore}</span>
+                <p>{Plot}</p>
+            </div>
+        )
+    }
+}
+```

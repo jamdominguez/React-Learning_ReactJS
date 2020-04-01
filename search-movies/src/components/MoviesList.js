@@ -8,7 +8,8 @@ export const MoviesList = (props) => {
             {movies.map(movie => {
                 return(
                     <div key={movie.imdbID} className='MoviesList-item'>
-                        <Movie                          
+                        <Movie  
+                        id={movie.imdbID}                        
                         poster={movie.Poster}
                         title={movie.Title} 
                         year={movie.Year} 

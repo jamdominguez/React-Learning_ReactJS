@@ -1,21 +1,22 @@
 import React from 'react'
 
-export const Movie = (props) => {    
+export const Movie = (props) => { 
+    const { id, poster, title, year} = props  
     return(
-        <div className="card">
+        <a href={`?id=${id}`}className="card">
             <div className="card-image">
                 <figure className="image">
-                    <img src={props.poster} alt={props.title}/>
+                    <img src={poster} alt={title}/>
                 </figure>
             </div>
             <div className="card-content">
                 <div className="media">
                     <div className="media-content">
-                        <p className="title is-4">{props.title}</p>
-                        <p className="subtitle is-6">{props.year}</p>
+                        <p className="title is-4">{title}</p>
+                        <p className="subtitle is-6">{year}</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     )
 }
