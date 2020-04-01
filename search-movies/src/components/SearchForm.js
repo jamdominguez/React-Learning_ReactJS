@@ -18,8 +18,8 @@ export class SearchForm extends Component {
         .then(res => res.json())
         .then(data =>{
             console.log(this.state.inputMovie, data)
-            const { Search, Response} = data            
-            Response === 'True' ? this.props.onResults(Search) : this.props.onResults([])           
+            const { Search = [] } = data  //default value for Search thanks to ES6          
+            this.props.onResults(Search)
         })
     }
 

@@ -3257,4 +3257,66 @@ And add new class to css
 }
 ``` 
 
+To fix 2 bugs:
+
+1. To start the application a message "No results" appears, better use another message:
+```js
+// App.js
+import React, { Component } from 'react';
+import { Title } from './components/Title'
+import { SearchForm } from './components/SearchForm'
+import { MoviesList } from './components/MoviesList';
+import './App.css';
+import 'bulma/css/bulma.css'
+
+class App extends Component{
+  state = {
+    results: [],
+    usedSearch: false,
+  }
+
+  _handleResults = (results) => {
+    this.setState({ 
+      results, 
+      usedSearch: true,
+    });
+  }
+
+  _renderResults = () => {
+    return(
+      this.state.results.length === 0 ? <small>No results</small> : <MoviesList movies={this.state.results} />
+    )
+  }
+
+  render() {        
+    return (
+      <div className="App">
+        <Title>Search Movies</Title>
+        <div className='SearchForm-wrapper'>
+          <SearchForm onResults={this._handleResults}/>
+        </div>
+        {this.state.usedSearch ? this._renderResults() : <small> Use the form to search a movie </small>}    
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+2. When no searching results, a execption appears in the application, is better return alwyas the same data type.The solution applied when no find results is recommend because is very important not change the data type. In this case, is a object array.
+```js
+// SearchForm.js
+_handleSubmit = (e) => {
+    e.preventDefault()        
+    fetch(`${API_END_POINT}&s=${this.state.inputMovie}`)
+    .then(res => res.json())
+    .then(data =>{
+        console.log(this.state.inputMovie, data)
+        const { Search = [] } = data  //default value for Search thanks to ES6          
+        this.props.onResults(Search)
+    })
+}
+```
+
 # 11. Redux: Application's Global Manager

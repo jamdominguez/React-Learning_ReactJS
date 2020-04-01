@@ -7,12 +7,23 @@ import 'bulma/css/bulma.css'
 
 class App extends Component{
   state = {
-    results: []
+    results: [],
+    usedSearch: false,
   }
 
   _handleResults = (results) => {
-    this.setState({ results })   
+    this.setState({ 
+      results, 
+      usedSearch: true,
+    });
   }
+
+  _renderResults = () => {
+    return(
+      this.state.results.length === 0 ? <small>No results</small> : <MoviesList movies={this.state.results} />
+    )
+  }
+
   render() {        
     return (
       <div className="App">
@@ -20,7 +31,7 @@ class App extends Component{
         <div className='SearchForm-wrapper'>
           <SearchForm onResults={this._handleResults}/>
         </div>
-        {this.state.results.length === 0 ? <p>No results</p> : <MoviesList movies={this.state.results} />} 
+        {this.state.usedSearch ? this._renderResults() : <small> Use the form to search a movie </small>}    
       </div>
     );
   }
