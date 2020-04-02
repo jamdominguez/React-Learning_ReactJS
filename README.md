@@ -111,6 +111,9 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Subsribing to store changes](#subsribing-to-store-changes)
     - [Send actios for new state in the store](#send-actios-for-new-state-in-the-store)
   - [11.6. Example: Counter with Redux with pure JavaScript](#116-example-counter-with-redux-with-pure-javascript)
+  - [11.7. Example: Counter with Redux with React Redux](#117-example-counter-with-redux-with-react-redux)
+    - [Concepts](#concepts)
+    - [Practices](#practices)
 
 
 # 1. Introduction
@@ -3974,6 +3977,9 @@ decrase.addEventListener("click", () => {
 ```
 Note that Stakblitz advice you when detect the 'redux' and suggest install redux dependnecy, install it for the example works.
 
+**If you want work in local it is necessary install redux library with npm (npm install --save redux) and use a local server**.
+
+
 Checking the browser console, see how the reducer is called in the store initialization, passing the inital state (with counter to '0' and a redux action type '@@redux/INITz.9.m.n.f.r'). Play with the button to check how the store.dispatch in the button listeners execute the createStore method and the counterApp method with the state passed.
 
 <div align='center'>
@@ -4028,4 +4034,212 @@ decrase.addEventListener('click', () => {
     type: 'DECREMENT'
   });
 });
+```
+
+## 11.7. Example: Counter with Redux with React Redux
+### Concepts
+To work with Redux in React there is a library to help in the integration and will divide the components in the two types explined (Containers and Presentationals).
+
+Install React Redux library
+```console
+npm install --save react-redux
+```
+
+This library helps to connect the components with the Redux store:
+- Avoid the store manual management in the components
+- Read the global state from any component in the tree components
+- Call actions from any component (dispatch)
+
+
+|                    | Presentationals           | Containers            |
+|--------------------|---------------------------|-----------------------|
+|Behaviour           | How the elments are represented | How is the logic|
+|Is from Redux       | No                        | Yes                   |
+|Read data           | From the props            | Subscribing to the state in Redux|
+|Hand data           | Callbacks from props      | Send actions to Redux |
+|Development         | Manually                  | Normally generates by React Redux|
+ 
+ The library React Redux provide mainly a method **connect()** and a component **Provider**:
+
+ - **connect([mapStateToProps][mapDispatchToProps])**: Let connect the React components to the Redux store. Return a function that revices like param the component that want connect.
+  ```js
+  const mapStateToProps = (state, ownProps) => {
+    // in this case recives counter like prop
+    return { counter: state.counter}
+  }
+
+  const mapDispatchToProps = (dispatch, ownProps) => {
+    // pops name to execute and call a action
+    return {
+      increment: () => dispatch({ type: 'INCREMENT' }),
+      decrement: () => dispatch({ type: 'DECREMENT' }),
+      reset: () => dispatch({ type: 'RESET' })
+    }
+
+    // create the connection
+    const createConnect = connect(mapStateToProps, mapStateToProps)
+
+    // pass the component Counter to connect
+    const ComponentWithConnectionToRedux = createToConnect(Counter)
+    export default ComponentWithConnectionToRedux
+  }
+  ```
+
+  - **Provider**: Allow the store is available for all tree elements. It is necessary wrpa the application in this component to use the method **connect**.
+  ```js
+  import { counterReducers } from './reducers'
+  import Counter from './containers/Counter'
+
+  const store = createStore(counterReducers)
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <Counter />
+    </Provider>
+    document.getElementById('root')
+  )
+  ```
+### Practices
+Using again Stackblitz, create a React aplication. Type the next code to build the same application that the javscript example but with React.
+
+```html
+<!-- index.html -->
+<div id="root"></div>
+```
+
+```js
+// index.js
+import React from 'react';
+import { render } from 'react-dom';
+import { Counter } from './components/Counter'
+
+render(
+  <Counter />, document.getElementById('root')
+ );
+```
+
+
+```js
+// component/Counter.js
+import React, { Component } from 'react'
+
+export class Counter extends Component {
+  state = {
+    counter: 0
+  }
+
+_handleIncrement = () => {  
+  this.setState ({ counter: this.state.counter + 1})
+}
+
+_handleDecrement = () => {  
+  this.setState ({ counter: this.state.counter - 1})
+}
+
+  render() {
+    return(
+      <div>
+        <div>
+          Counter: <span>{this.state.counter}</span>
+        </div>
+        <button onClick={this._handleIncrement}>+</button>
+        <button onClick={this._handleDecrement}>-</button>
+      </div>
+    )
+  } 
+}
+```
+
+This applications works, now is the moment add Redux. **Note it is necessary install redux and react-redux library.**
+
+1. **Create application's reducer** Create a new folder 'reducers' and a index.js inside. Implement the app reducer. This componet implement the state modification.
+```js
+// reducers/index.js
+const INITIAL_STATE = {  counter : 0 }
+
+// reducer
+export function counterApp(state = INITIAL_STATE, action) {
+  console.log('previous state', state, action)
+  switch (action.type) {
+    case 'INCREMENT':
+      return { counter: state.counter + 1}
+    case 'DECREMENT':
+      return { counter: state.counter - 1}
+    case 'RESET':
+      return INITIAL_STATE           
+    default:
+      return state
+  }
+}
+```
+
+2. Create a 'containers' folder and **implement the container component** which connect with Redux. Like want pass the Counter from use local state to global state, create the connection for this compoents
+```js
+// container/Counter.js
+import { connect } from 'react-redux'
+import { Counter } from '../components/Counter'
+
+const mapStateToProps = state => {
+  return { counter: state.counter }
+}
+
+const mapDispatchToProps = dispatch  => {
+  return {
+    increment: () => dispatch({ type: 'INCREMENT'}),
+    decrement: () => dispatch({ type: 'DECREMENT'}),
+    reset: () => dispatch({ type: 'RESET'})
+   }
+}
+
+const createConnection = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)
+
+const ComponentWithConnectionToRedux = createConnection(Counter)
+export default ComponentWithConnectionToRedux
+```
+
+3. **Available store from all components int the application access point**:  Wrapp the application with Provider component to be available the store access from any component. Import the Counter container to use the redux store. Note how is named the container Counter component (because is exported by default and is possible do this)
+```js
+// index.js
+import React from 'react';
+import { render } from 'react-dom';
+import CounterContainer from './containers/Counter'
+
+import { counterApp } from './reducers/'
+import { createStore} from 'redux'
+
+import { Provider } from 'react-redux'
+
+const store = createStore(counterApp)
+
+render(
+  <Provider store={store}>
+    <CounterContainer />
+  </Provider>,
+  document.getElementById('root')
+ );
+```
+
+4. **Create/modify the component to be presentational** (Counter). In this point the component Counter not need any function to calculate the count, because this logic is been executed in the **counterApp** reducer. Furthermore now the data arrive by props and not by state. The props recived are the props build by the container/Counter component in the method **constStateToProps** and **constDispatchToProps**.
+```js
+// components/Counter.js
+import React from 'react'
+
+export function Counter({counter, increment, decrement, reset})  {      
+    return(
+      <div>
+        <div>
+          Counter: <span>{counter}</span>
+        </div>
+        <button onClick={increment}>+</button>
+        <button onClick={decrement}>-</button>
+        <br/>
+        <div>
+          <button onClick={reset}>Reset</button>
+        </div>
+      </div>
+    )  
+}
 ```
