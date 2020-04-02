@@ -100,7 +100,16 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [SPA](#spa)
   - [10.6. Page 404](#106-page-404)
   - [10.7. Publishing with Surge](#107-publishing-with-surge)
-- [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
+- [11. Redux - Application's Global Manager](#11-redux---applications-global-manager)
+  - [11.1. Redux: Basics Concepts](#111-redux-basics-concepts)
+  - [11.2. Redux: Main Rules](#112-redux-main-rules)
+  - [11.3. Redux: Diagram](#113-redux-diagram)
+  - [11.4. Glossary](#114-glossary)
+  - [11.5. Examples](#115-examples)
+    - [Store and Reducer](#store-and-reducer)
+    - [Read the current store](#read-the-current-store)
+    - [Subsribing to store changes](#subsribing-to-store-changes)
+    - [Send actios for new state in the store](#send-actios-for-new-state-in-the-store)
 
 
 # 1. Introduction
@@ -3764,4 +3773,132 @@ E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies>surge build
 
 If acces now, the title is changed and there isn't the url problem.
 
-# 11. Redux: Application's Global Manager
+# 11. Redux - Application's Global Manager
+Redux is a external library that can be integrated in the projects with React for generate a global state in the application.
+Redux is a predecible container application of the his global state. It is based in Flux architecture (Facebook).
+
+Is the most used libreray fo the global state management in React projects
+
+## 11.1. Redux: Basics Concepts
+- The application state is described lika simple object
+- The application state is global adn can be recovered from any view
+- The application state can't be modified, must create another one from the previous state according action executed
+
+## 11.2. Redux: Main Rules
+- Unique truth way. Every application state is content in a unique **store**.
+- The state is **inmutable** (read only). The unique way to modify a state is execute a action that indicates that the state changed.
+- THe state changes are produced with pure funcionts. To control how the store is modidfied by actions is use pure **reducers** (pure functions)
+
+
+## 11.3. Redux: Diagram
+
+1. **Store**: With the global state
+2. **View**: Check the global state using subscription (React components, Aangular, jquery web page, etc)
+3. **Actions**: Emited by the views to generate a new global state
+4. **Reducers**: Recive the actions emited by the view, using the previous state and new data generates a new state in the store.
+
+<div align='center'>
+
+![Redux Diagram](img/redux_diagram.PNG)
+
+</div>
+
+## 11.4. Glossary
+- **Actions**: Are JavaScript objets with a property **type** to indicates the action. Can content another actions like "payload" to execute an action
+- **Action Creators**: Are pure funtions that return Actions.
+- **Reducers**: Are pure actions que recives the previous state and the action and generate a new state.
+- **Store**: Place where is stored the application global state. Provide method to add actions and subscribing. To create a store use the method createStore(reducers) from the Redux library.
+
+## 11.5. Examples
+### Store and Reducer
+Here is important set a initial state and always return a state.
+```js
+// store.js
+
+// import the method createStore from Redux library
+import { createStore } from 'redux'
+
+// create the reducer
+function todos(state = [], action) {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return state.conecat([action.text])
+    default:
+      return state
+  }
+}
+
+// create the store, passing the reducer
+const store = createStore(todos) 
+
+// export the store
+export default store
+```
+
+### Read the current store
+```js
+import store from './store.js'
+
+// show the current application global store
+console.log(store.getState())
+```
+
+### Subsribing to store changes
+The subscribe returns a unsubscribe function to avoid memory leaks or stop listen change in the store according with the view.
+```js
+// a random view
+
+import store from './store.js'
+
+// the subscribe returns the unsubscrie function
+const unsubscribe = store.subscribe(() => {
+  // this function is the subscribe callback, executed que the global state changes
+  console.log(store.getState())
+
+//update hte application
+  const { user } = store.getState()
+  document.getElementById('user').innerHTML = user
+});
+
+// execute unsubscribe when click the element with id 'close'
+document.getElementByid('close').addEventListener('click', () => unsubscribe())
+```
+
+### Send actios for new state in the store
+Using the dispatch method passing the action. It is possible using actions creators to send actions.
+
+**Send the action without actions creator**
+```js
+// arandom view
+
+import store from './store.js'
+
+// send new action to the store, update the state
+store.dispatch({
+  type: 'ADD_TODO',
+  text: 'Learning React and Redux'
+})
+```
+
+**Send the action with actions creator**
+```js
+// actions.js
+
+function addTodo(text) {
+  return(
+    type: 'ADD_TODO',
+    playload: {
+      text,
+    },
+  )
+}
+```
+```js
+// a random view
+
+import store from './store.js'
+// import the function from the actions creator
+import { addTodo } from './actions.js'
+
+store.dispatch(addTodo('Learning React and Redux'))
+```
