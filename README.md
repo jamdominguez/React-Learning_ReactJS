@@ -89,6 +89,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Container Componenent](#container-componenent)
     - [Content/Presentational Component](#contentpresentational-component)
   - [9.4.Component Strict-mode](#94component-strict-mode)
+  - [9.5. NPM installations](#95-npm-installations)
 - [10. Project: Online films seeker](#10-project-online-films-seeker)
   - [10.1. Intallation](#101-intallation)
   - [10.2. Building firs components](#102-building-firs-components)
@@ -98,6 +99,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Routing with JavaScritp native API](#routing-with-javascritp-native-api)
     - [SPA](#spa)
   - [10.6. Page 404](#106-page-404)
+  - [10.7. Publishing with Surge](#107-publishing-with-surge)
 - [11. Redux: Application's Global Manager](#11-redux-applications-global-manager)
 
 
@@ -127,11 +129,11 @@ For me are 12.16.1(Node) and 6.14.2(NPM).
 ## 2.3. Install Create React App package
 - Access to https://github.com/facebook/create-react-app where the project are stored and check the readme file to verify you have the Node and NPM version required.
 - Note that it is necesary **npx** tool. It makes easy to use CLI tools and other executables hosted on the registry.
-- To use **npx** tool it is necessary npm **5.2 or higher** and **Node 8.16.0 or Node10.16.0 or later version**.
-- To install create react app by global way:
+- To install create react app by global way (**before npm 5.2**):
 ```console
 npm install -g create-react-app
 ```
+- To use **npx** tool it is necessary npm **5.2 or higher** and **Node 8.16.0 or Node10.16.0 or later version**.
 - To intall and create a applicaton execute the next command:
 ```console
 npx create-react-app udemy-course
@@ -2943,6 +2945,16 @@ serviceWorker.unregister();
 **It seems that in React 17 and upper, not is necessary use this tool explicity, because we are getting warning message, with the obsolete/deprecated method.
 Using this tool no get aditional warnings.**
 
+
+## 9.5. NPM installations
+Always the libraries provides by NPM must be installed locally (not using -g/--global) because if theses libraries are used by several projects in your machine, if the version change can impact in project without want it.
+
+For this reason is recommended install the pacakges always locally in the project (example: **prop-types** or **bulma** pacakges)
+
+The packages with executables that no modified anything in the application can are the unique packages could be installed globally without impact in the projects in your machine (example: **surge**)
+
+
+
 # 10. Project: Online films seeker
 ## 10.1. Intallation
 Use the next command to create de application:
@@ -3650,5 +3662,106 @@ export const ButtonBackToHome = () => {
     )
 }
 ```
+
+## 10.7. Publishing with Surge
+It is a serive that allow publish a static web from the console. There is a package in npm related with this service.
+
+```console
+npm install --global surge
+```
+
+Before publishing is necessary generate a production version of the application ussing the command:
+
+```console
+npm run build
+```
+
+After execute this command new folder build will be created with the production build with the application files optimized ans compressed ready to release. To the files name is concatenated a hash code to avoid the cache problems in browser if release a new version.
+
+To release the application use the command usrge with the directory that want release.
+
+```console
+surge build
+```
+
+When executed the command, must type the email and password and the console will show the domain where de application will be published. If you are not registred, will recive a email to verify the account. It is possible change he subdomain, for example search-movies.surge.sh, and this domain will be related with your account forever.
+
+Here there is a problem, when type a url directly, not appears the 404 page designed, because it is for client side, not server side. But we can fix it coping the file index.html to another one called 200.html (in build folder). It is a Surge convention for work with SPAs. In this case Surge will show 200.html when the user try access a url that no was the root.
+
+```console
+E:\Documentos\React_Projects\React-Learning_ReactJS>cd search-movies
+
+E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies>surge build
+
+   Welcome to surge! (surge.sh)
+   Login (or create surge account) by entering email & password.
+
+          email: jamdominguez@gmail.com
+       password:
+
+   Running as jamdominguez@gmail.com (Student)
+
+        project: build
+         domain: search-movies-udemy.surge.sh
+
+   Aborted - you do not have permission to publish to search-movies-udemy.surge.sh
+``` 
+
+I cant publish in this domain because is used, try with another.
+
+```console
+
+E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies>surge build
+
+   Running as jamdominguez@gmail.com (Student)
+
+        project: build
+         domain: search-movies-jam.surge.sh
+         upload: [====================] 100% eta: 0.0s (20 files, 926448 bytes)
+            CDN: [====================] 100%
+             IP: 45.55.110.124
+
+   Success! - Published to search-movies-jam.surge.sh
+
+``` 
+
+It was success. Change the application title in public/index.html, adn rebuild the application.
+
+```console
+E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies>npm run build
+
+> search-movies@0.1.0 build E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies
+> react-scripts build
+
+Creating an optimized production build...
+Compiled successfully.
+
+File sizes after gzip:
+
+  47.83 KB  build\static\js\2.b4b7dc35.chunk.js
+  24.75 KB  build\static\css\2.b9b2dd63.chunk.css
+  1.66 KB   build\static\js\main.f9f7e2ea.chunk.js
+  776 B     build\static\js\runtime-main.a0f39f3b.js
+  402 B     build\static\css\main.26844ec1.chunk.css
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+```
+
+ Verified the comment problems when try access directly to a url in the application published. Appears a Surge 404 error. Apply the fix (coping the build/index.htm file to build/200.html) and execute the Surge command again.
+
+```console
+E:\Documentos\React_Projects\React-Learning_ReactJS\search-movies>surge build
+
+
+         domain: search-movies-jam.surge.sh
+         upload: [====================] 100% eta: 0.0s (21 files, 928752 bytes)
+            CDN: [====================] 100%
+             IP: 45.55.110.124
+        project: build
+   Success! - Published to search-movies-jam.surge.sh
+```
+
+If acces now, the title is changed and there isn't the url problem.
 
 # 11. Redux: Application's Global Manager
