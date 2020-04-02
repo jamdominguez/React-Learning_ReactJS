@@ -110,6 +110,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
     - [Read the current store](#read-the-current-store)
     - [Subsribing to store changes](#subsribing-to-store-changes)
     - [Send actios for new state in the store](#send-actios-for-new-state-in-the-store)
+  - [11.6. Example: Counter with Redux with pure JavaScript](#116-example-counter-with-redux-with-pure-javascript)
 
 
 # 1. Introduction
@@ -3901,4 +3902,130 @@ import store from './store.js'
 import { addTodo } from './actions.js'
 
 store.dispatch(addTodo('Learning React and Redux'))
+```
+
+## 11.6. Example: Counter with Redux with pure JavaScript
+To performance this example use the [Stackblitz](https://stackblitz.com/) web editor.
+
+- Click in START A NEW APP
+
+<div align='center'>
+
+  ![Stackblitz Start New App](img/redux_js_example_1.PNG)
+
+</div>
+
+- Choose JS application
+
+<div align='center'>
+
+  ![Stackblitz JS App](img/redux_js_example_2.PNG)
+
+</div>
+
+- When the applciations is created, modify the index.html and create the index.js.
+
+In index.html add a counter label and two buttons
+```js
+<script src="index.js"></script>
+
+<div>
+    Counter: <span id='counter'>0</span>
+</div>
+
+<button id='incrase'>+</button>
+<button id='decrase'>-</button>
+```
+
+
+In index.js initialize the state, create a reducer to send actions to the store, create the store and add listener for the buttons, 
+```js
+import { createStore } from "redux";
+
+const counter = document.getElementById("counter");
+const incrase = document.getElementById("incrase");
+const decrase = document.getElementById("decrase");
+
+// initialize the state
+const INITIAL_STATE = {
+  counter: 0
+};
+
+// reducer
+function counterApp(state = INITIAL_STATE, action) {
+  console.log(state, action);
+  return state;
+}
+
+// store. Eacch action is sent to store, it must execute the action counterApp
+const store = createStore(counterApp);
+
+// listeners
+incrase.addEventListener("click", () => {  
+  store.dispatch({
+    type: "INCREMENT"
+  });
+});
+decrase.addEventListener("click", () => {  
+  store.dispatch({
+    type: "DECREMENT"
+  });
+});
+```
+Note that Stakblitz advice you when detect the 'redux' and suggest install redux dependnecy, install it for the example works.
+
+Checking the browser console, see how the reducer is called in the store initialization, passing the inital state (with counter to '0' and a redux action type '@@redux/INITz.9.m.n.f.r'). Play with the button to check how the store.dispatch in the button listeners execute the createStore method and the counterApp method with the state passed.
+
+<div align='center'>
+
+  ![Stackblitz JS App](img/redux_js_example_3.PNG)
+
+</div>
+
+Now modify the reducer to incrase and decrase the counter according the action type and subscribe to the store to change the label when the state change. Note in the console log the counter shown is the previous state counter.
+
+```js
+import { createStore } from "redux";
+
+const counter = document.getElementById("counter");
+const incrase = document.getElementById("incrase");
+const decrase = document.getElementById("decrase");
+
+// initialize the state
+const INITIAL_STATE = { counter: 0 };
+
+// reducer
+function counterApp(state = INITIAL_STATE, action) {  
+  console.log('previous state', state, 'new action', action)
+  switch (action.type) {
+    case 'INCREMENT':
+      return { counter: state.counter + 1 }
+    case 'DECREMENT':
+      return { counter: state.counter - 1 }
+    default:
+      return state
+  }  
+}
+
+// store. Eacch action is sent to store, it must execute the action counterApp
+const store = createStore(counterApp);
+
+// the inner function will be execute always a new state will be gerate
+const unsubscribe = store.subscribe(() => {  
+  const state = store.getState()
+  console.log('state changed', state)
+  counter.innerText = state.counter
+});
+
+// listeners
+incrase.addEventListener('click', () => {  
+  store.dispatch({
+    type: 'INCREMENT'
+  });
+});
+decrase.addEventListener('click', () => {  
+  store.dispatch({
+    type: 'DECREMENT'
+  });
+});
 ```
