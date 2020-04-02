@@ -3,7 +3,7 @@ Introduction to React.
 
 It is based in a [Udemy](https://www.udemy.com/) course.
 
-**Status: In develop**
+**Status: Completed**
 
 <div align="center">
 
@@ -114,6 +114,7 @@ It is based in a [Udemy](https://www.udemy.com/) course.
   - [11.7. Example: Counter with Redux with React Redux](#117-example-counter-with-redux-with-react-redux)
     - [Concepts](#concepts)
     - [Practices](#practices)
+    - [Summary](#summary)
 
 
 # 1. Introduction
@@ -4247,3 +4248,9 @@ export function Counter({counter, increment, decrement, reset})  {
     )  
 }
 ```
+
+### Summary
+1. Create the reducers with the logic to change the global state
+2. Create the Container Component. It connect with Redux and create the props to be passed to the Presentational Component.
+3. Adapts the application access point (index.js). Create the store and wrapp the application in a Provider component passing the store created like prop.
+4. Create the Presentational Component. It recive the props and render according them. No use the local state any more.
