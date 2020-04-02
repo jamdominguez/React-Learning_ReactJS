@@ -3977,10 +3977,10 @@ decrase.addEventListener("click", () => {
 ```
 Note that Stakblitz advice you when detect the 'redux' and suggest install redux dependnecy, install it for the example works.
 
-**If you want work in local it is necessary install redux library with npm (npm install --save redux) and use a local server**.
+**If you want work in local it is necessary install Redux library with npm (npm install --save redux) and use a local server**.
 
 
-Checking the browser console, see how the reducer is called in the store initialization, passing the inital state (with counter to '0' and a redux action type '@@redux/INITz.9.m.n.f.r'). Play with the button to check how the store.dispatch in the button listeners execute the createStore method and the counterApp method with the state passed.
+Checking the browser console, see how the reducer is called in the store initialization, passing the inital state (with counter to '0' and a Redux action type '@@redux/INITz.9.m.n.f.r'). Play with the button to check how the store.dispatch in the button listeners execute the createStore method and the counterApp method with the state passed.
 
 <div align='center'>
 
@@ -4050,6 +4050,8 @@ This library helps to connect the components with the Redux store:
 - Read the global state from any component in the tree components
 - Call actions from any component (dispatch)
 
+<div align='center'>
+
 
 |                    | Presentationals           | Containers            |
 |--------------------|---------------------------|-----------------------|
@@ -4058,6 +4060,8 @@ This library helps to connect the components with the Redux store:
 |Read data           | From the props            | Subscribing to the state in Redux|
 |Hand data           | Callbacks from props      | Send actions to Redux |
 |Development         | Manually                  | Normally generates by React Redux|
+
+</div>
  
  The library React Redux provide mainly a method **connect()** and a component **Provider**:
 
@@ -4200,7 +4204,7 @@ const ComponentWithConnectionToRedux = createConnection(Counter)
 export default ComponentWithConnectionToRedux
 ```
 
-3. **Available store from all components int the application access point**:  Wrapp the application with Provider component to be available the store access from any component. Import the Counter container to use the redux store. Note how is named the container Counter component (because is exported by default and is possible do this)
+3. **Available store from all components int the application access point**:  Wrapp the application with Provider component to be available the store access from any component. Import the Counter container to use the Redux store. Note how is named the container Counter component (because is exported by default and is possible do this)
 ```js
 // index.js
 import React from 'react';
