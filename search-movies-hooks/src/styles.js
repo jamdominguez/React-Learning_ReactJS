@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
 
-
 const centeredStyleObj = {
     display: 'flex',
     alignItems: 'center',
@@ -34,5 +33,10 @@ export default makeStyles({
     },
     buttonsContainer: {
         marginTop: '.5rem'
+    },
+    movieIcon: {
+        marginTop: '.5rem',
+        fontSize: '4rem',
+        marginLeft: '.5rem'
     }
 })

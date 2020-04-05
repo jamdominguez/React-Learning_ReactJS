@@ -33,6 +33,11 @@ npm install
 npm update
 ```
 
+Library to add Material-ui icons
+```console
+npm install --save @material-ui/icons
+```
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
