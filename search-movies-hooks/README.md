@@ -1,6 +1,6 @@
 
-# Introdcution
-It is the same application that search movies but implemented with hooks, Redux for management and Material UI for styles.
+# Introduction
+It is the same application that Search Movies but implemented with hooks, Redux for management and Material UI for styles.
 
 To work with React hooks it is necessary the React version 16.8 or upper.
 
@@ -10,21 +10,22 @@ npx create-react-app search-movies-hooks
 ```
 
 # Dependencies
+### PropTypes
 Library for PropTypes.
 ```console
 npm install --save prop-types
 ```
-
+### Redux
 Library for Redux
 ```console
 npm install --save react-redux
 ```
-
+### Material-ui
 Library for styles
 ```console
 npm install --save @material-ui/core
 ```
-
+### Npm-Check-Updates
 Libray to check the dependnecies version, check it, install and update commandas.
 ```console
 npm install -g npm-check-updates
@@ -32,11 +33,46 @@ ncu -u
 npm install
 npm update
 ```
+___
+For icons have two options, one is create your own library, anohter one is use a library create from material-ui
 
-Library to add Material-ui icons
+#### -  Built your icons's library.
+1. Create a folder called "icon" o like you want
+2. Into the folder, create one file called index.js, this file provides all icons component into the folder
+3. Into the folder, create all icons needed like components using SvgIcon component from material-ui/core.
+4. Import you library in the component where you want use the personal icon.
+```js
+// MovieIcon.js - customized icon
+import React from 'react'
+import { SvgIcon } from '@material-ui/core'
+
+export default props => {
+    <SvgIcon {...props}>
+        //your icon <path> for you customized movie icon
+    </SvgIcon>
+}
+```
+```js
+// index.js - icons library provider
+import MovieIcon from './MovieIcon'
+
+export {
+    MovieIcon
+};
+```
+```js
+// yourcomponent.js
+import { MovieIcon } from '../icons'// icon folder, and use it
+```
+
+
+#### - Install material-ui/icons
+Library to add Material-ui icons, add the icons like components (my option)
 ```console
 npm install --save @material-ui/icons
 ```
+
+___
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

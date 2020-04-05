@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Card, Grid, Typography, TextField, Button } from '@material-ui/core'
 import MovieIcon from '@material-ui/icons/Movie';
-import styles from '../styles'
+import styles from '../Styles'
 
 export default () => {
     const [textToSearch, setTextToSearch] = useState('') // Hook, works like this.state and setState. Initialize the state
