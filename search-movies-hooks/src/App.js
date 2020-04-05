@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SearchForm from './components/SearchForm'
+import Search from './components/Search'
 
 import './App.css';
 
@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <SearchForm />
+        <Search />
       </header>
     </div>
   );

@@ -1,8 +1,10 @@
+/**
+ * Redux Action object: searchMovie
+ */
 import {SEARCH_MOVIE_START} from './ActionTypes'
 
-// reducer
-export const searchMove = payload => ({
+export const searchMovie = payload => ({
     type: SEARCH_MOVIE_START,
     payload
-})
+});
 

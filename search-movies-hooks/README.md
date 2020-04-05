@@ -11,15 +11,33 @@ npx create-react-app search-movies-hooks
 
 # Dependencies
 ### PropTypes
-Library for PropTypes.
+Library for PropTypes to provite props typing 
 ```console
 npm install --save prop-types
 ```
-### Redux
-Library for Redux
+### React-Redux
+Library for use Redux with React
 ```console
 npm install --save react-redux
 ```
+### Redux-Saga
+Library to help in async calls togehter Redux
+```console
+npm install --save redux-saga
+```
+### Redux
+Librrary for global state management
+```console
+npm install --save redux
+```
+
+### Axios
+Library to management promise
+```console
+npm install --save axios
+``
+
+
 ### Material-ui
 Library for styles
 ```console
