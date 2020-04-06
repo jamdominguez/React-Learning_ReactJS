@@ -6,7 +6,8 @@ import { Container, Card, Grid, Typography, TextField, Button } from '@material-
 import MovieIcon from '@material-ui/icons/Movie';
 import styles from '../Styles'
 
-export default () => {
+export default (history) => {
+    console.log(history)
     const [objState, setObjState] = useState({ editableText: '', disabledText: ''}) // Hook, works like this.state and setState. Initialize the state
     const classes = styles();
 
@@ -19,12 +20,12 @@ export default () => {
             setObjState({editableText: textValue, disabledText: transformText(textValue)})            
     }
 
-    const handleCleanOnClik = () => {
-        console.log('handleCleanOnClik')
+    const handleCleanOnClik = () => {        
+        setObjState( {editableText: '', disabledText: ''} )
     }
 
     const handleSeachOnClik = () => {
-        console.log('handleSeachOnClik', objState)
+        history.push(`/results?movieName=${objState.textValue}`)
     }
     return(        
         <Container className={classes.container}>

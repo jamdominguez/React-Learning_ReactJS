@@ -15,6 +15,12 @@ Library for PropTypes to provite props typing
 ```console
 npm install --save prop-types
 ```
+### React Router Dom
+Library to management the application routes
+```console
+npm install --save react-router-dom
+```
+
 ### React-Redux
 Library for use Redux with React
 ```console
@@ -30,12 +36,21 @@ Librrary for global state management
 ```console
 npm install --save redux
 ```
-
 ### Axios
 Library to management promise
 ```console
 npm install --save axios
-``
+```
+### Query-String
+Library for parse and stringify query strings
+```console
+npm install --save query-string
+```
+### Lodash
+Library to crete getters and setter from JSON
+```console
+npm install --save lodash
+```
 
 
 ### Material-ui

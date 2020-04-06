@@ -1,7 +1,6 @@
 /**
  * Redux Reducer for Search component
  */
-import { get } from 'lodash'
 import {
     SEARCH_MOVIE_START,
     SEARCH_MOVIE_ERROR,
@@ -14,11 +13,11 @@ const INITIAL_STATE = {}
 export default function(state = INITIAL_STATE, action) {
     switch (action.type) {
         case SEARCH_MOVIE_START:           
-            return { ...state}
+            return { ...state, isLoading: true}
         case SEARCH_MOVIE_ERROR:           
-            return { ...state}
+            return { ...state, isLoading: false, movies: null}
         case SEARCH_MOVIE_COMPLETE:           
-            return { ...state}
+            return { ...state, isLoading: false, movieResults: action.results.data}
         default:
             return { ...state}
     }

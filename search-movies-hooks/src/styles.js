@@ -38,5 +38,14 @@ export default makeStyles({
         marginTop: '.5rem',
         fontSize: '4rem',
         marginLeft: '.5rem'
+    },
+    cardContainerResults: {
+        marginBottom: 8
+    },
+    poster : {
+        width: 120
+    },
+    titlesContainer : {
+        paddingLeft: 8
     }
 })
