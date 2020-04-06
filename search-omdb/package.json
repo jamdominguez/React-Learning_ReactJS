@@ -1,5 +1,5 @@
 {
-  "name": "search-games",
+  "name": "search-omdb",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
