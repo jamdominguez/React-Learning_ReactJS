@@ -36,3 +36,69 @@
     transform: rotate(360deg);
   }
 }
+.points-metascore{
+  margin-top: 0px;
+  margin-left: 20px;
+  width: 200px;
+  text-align: left;  
+  border: 3px solid black;
+  border-radius: 5%;
+  padding-left: 5px;
+  color: whitesmoke; 
+}
+.div-detail{
+  margin: 2em;
+  display: flex;
+  color: whitesmoke;
+}
+.metascore{
+  font-size: 20px;
+  background-color: black;   
+  color: whitesmoke; 
+}
+.plot{
+  font-size: 15px;
+  text-align: left;
+  float: left;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+.summary{
+  font-size: 15px;
+  text-align: justify;
+  margin-left: 20px;
+  margin-top: 100px;
+}
+.good{
+  background-color: green;
+}
+.medium{
+  background-color: rgb(255, 196, 0);
+}
+.bad{
+  background-color: red;
+}
+
+.detail-poster{
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.644);
+  border-radius: 1%;
+}
+.btn{
+  font-size: 30px;
+  color: whitesmoke;
+  font-weight: bolder;
+  background-color: black;
+  border-radius: 10px;
+}
+.lg:hover{
+  background-color: yellow;
+  color: grey;
+}
+.title{
+  background-color: black;
+  color: whitesmoke;
+  text-shadow: 0 0 3px yellow, 0 0 5px #0000FF;
+  border: 3px solid whitesmoke;
+  padding: 0.5em;
+  margin: 1em;
+}

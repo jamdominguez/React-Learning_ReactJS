@@ -1,9 +1,9 @@
 import React from 'react'
-import SearchGames from '../components/SearchGames/SearchGames'
+import SearchContainer from '../components/Search/SearchContainer'
 
 const Home = () => {
     return(
-        <SearchGames />
+        <SearchContainer />
     )
 }
 export default Home
