@@ -19,13 +19,13 @@ class ElementDetailContainer extends React.Component {
 
     componentDidMount() {
         console.log('props', this.props)
-        const { id } = this.props.match.params
+        const { id } = this.props.match.params                
         details(id, (element) => this.setState({ element }))
     }
 
     render() {        
         return(
-            <ElementDetail {...this.state}/>
+            <ElementDetail {...this.state} onBack={this.handleOnBack}/>
         )
     }
 }

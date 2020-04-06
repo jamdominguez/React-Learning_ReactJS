@@ -15,7 +15,7 @@ const ElementDetail = (props) => {
 
     return(        
         <div>
-            <h2 class='title'>{Title}</h2>
+            <h2 className='title'>{Title}</h2>
             <div className='div-detail'>
                 <div>
                     <img src={Poster} alt={Title} className='detail-poster'/>                    
@@ -30,8 +30,8 @@ const ElementDetail = (props) => {
                         <p><strong>Writer:</strong> {Writer}</p>
                         <p><strong>Actors:</strong> {Actors}</p>                
                     </div>
-                    <div align='right'>
-                        <Link to='/' className='lg'><button className='btn'>Back Home</button> </Link>                    
+                    <div align='right'>                        
+                        <Link to='/'><button className='btn'>Back Search</button> </Link>                    
                     </div>
                 </div>
             </div>        

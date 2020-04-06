@@ -5,9 +5,10 @@ const ElementInfoList = (props) => {
     if (props.results) {
         const { results } = props        
         if (results.Response === 'True') {            
-            return(                                
+            let id = 0
+            return(                         
                 results.Search.map(result => 
-                    <ElementInfo key={result.omdbId}
+                    <ElementInfo className='child' key={id++}
                         {...result}                        
                     />
                 )

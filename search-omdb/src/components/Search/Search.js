@@ -14,19 +14,28 @@ const Search = (props) => {
     } = props
        
     return(
-        <form onSubmit={handleOnSubmit}>
-            <div>
-                <input 
-                    id={inputTextId} 
-                    onChange={handleTextOnChange}
-                    placeholder={inputTextPlaceHolder} 
-                    type='text' 
-                    value={inputTextValue} 
-                />
-                <button>{buttonLabel}</button>
+        <div>
+            <div className='div-search'>
+                <form onSubmit={handleOnSubmit}>
+                <h1 className='app-title'>Search Movies/Games/Series</h1>
+                    <div>
+                        <input
+                            autoFocus 
+                            id={inputTextId} 
+                            className='input-text'
+                            onChange={handleTextOnChange}
+                            placeholder={inputTextPlaceHolder} 
+                            type='text' 
+                            value={inputTextValue} 
+                        />
+                        <button className='btn'>{buttonLabel}</button>
+                    </div>
+                </form>
             </div>
-            <ElementInfoList results={results} />
-        </form>
+            <div className='parent'>
+                <ElementInfoList results={results} />
+            </div>
+        </div>
     )
 }
 export default Search

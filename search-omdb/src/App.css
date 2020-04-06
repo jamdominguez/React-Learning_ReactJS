@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #2f3135;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -87,18 +87,76 @@
   font-size: 30px;
   color: whitesmoke;
   font-weight: bolder;
-  background-color: black;
-  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.678);
+  border-radius: 10px;  
+  margin-right: 10px;
 }
+.btn:hover{
+  text-shadow: 0 0 3px black, 0 0 20px white;
+  background-color: black;
+}
+
+.btn:active{
+  text-shadow: 0 0 3px black, 0 0 5px white;
+  background-color: white;
+  color: black;
+}
+
+.app-title{
+  color: whitesmoke;
+  text-shadow: 0 0 3px black, 0 0 5px white;
+}
+
+.input-text{
+  font-size: 30px;
+  font-weight: bolder;
+  border-radius: 5px;
+  margin-right: 20px;
+}
+
 .lg:hover{
   background-color: yellow;
   color: grey;
 }
-.title{
-  background-color: black;
+.title{  
   color: whitesmoke;
-  text-shadow: 0 0 3px yellow, 0 0 5px #0000FF;
+  text-shadow: 0 0 3px black, 0 0 5px orange;
   border: 3px solid whitesmoke;
   padding: 0.5em;
   margin: 1em;
+}
+.div-search{
+  margin-top: 20px;
+  background-color: #282c34;
+  border-radius: 20px;  
+  padding: .5em 1em 2em;
+  border: 5px solid whitesmoke
+}
+
+.title-result{
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+.title-result:hover{
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+.results-list{
+  display: flex;
+
+}
+.parent {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.child {
+  flex: 1 0 21%; /* explanation below */
+  margin: 5px;
+  width: 400px;
+  border-radius: 15px;
+  text-decoration: none;
+  text-shadow: 0 0 3px black, 0 0 5px orange;
 }

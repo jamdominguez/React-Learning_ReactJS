@@ -16,3 +16,12 @@ export const details = (id, _callBack) => {
         _callBack(data)
     })
 }
+
+export const addTextToStorage = (value) => {
+    sessionStorage.setItem('textToSearch', value)
+}
+
+export const getTextFromStorage = () => {
+    const value = sessionStorage.getItem('textToSearch')
+    return  value ? value : ''
+}

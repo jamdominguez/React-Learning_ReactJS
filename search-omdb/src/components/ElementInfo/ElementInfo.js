@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 const ElementInfoPres = (props) => {
     const {imdbID, Title, Poster, Year } = props        
     return(  
-        <Link to={`/detail/${imdbID}`}>
-            <div>
+        <Link className='child' to={`/detail/${imdbID}`}>
+            
                 <figure>
-                    <img src={Poster} alt={Title} />
+                    <img className='detail-poster' src={Poster} alt={Title} />
+                    <p className='title-result'>{Title} | <small>{Year}</small> </p>                        
                 </figure>
-                <p>{Title} <small>{Year}</small> </p>                        
-            </div>
+            
         </Link>            
     )
 }
