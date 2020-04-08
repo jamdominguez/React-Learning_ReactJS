@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: center;  
 }
 
 .App-logo {
@@ -80,7 +80,7 @@
 }
 
 .detail-poster{
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.644);
+  box-shadow: 12px 12px 5px rgba(0, 0, 0, 0.644);
   border-radius: 1%;
 }
 .btn{
@@ -104,7 +104,7 @@
 
 .app-title{
   color: whitesmoke;
-  text-shadow: 0 0 3px black, 0 0 5px white;
+  text-shadow: 0 0 3px black, 0 0 5px orange;
 }
 
 .input-text{
@@ -112,6 +112,10 @@
   font-weight: bolder;
   border-radius: 5px;
   margin-right: 20px;
+  
+}
+.input-text:focus{  
+  box-shadow: 0 0 10px black, 0 0 20px orange;
 }
 
 .lg:hover{
@@ -130,7 +134,8 @@
   background-color: #282c34;
   border-radius: 20px;  
   padding: .5em 1em 2em;
-  border: 5px solid whitesmoke
+  border: 5px solid whitesmoke;
+  box-shadow: 20px 20px 5px rgba(0, 0, 0, 0.644);;
 }
 
 .title-result{
@@ -144,7 +149,8 @@
 }
 
 .results-list{
-  display: flex;
+  display: flex !important;
+  flex-wrap: wrap !important;
 
 }
 .parent {
@@ -159,4 +165,15 @@
   border-radius: 15px;
   text-decoration: none;
   text-shadow: 0 0 3px black, 0 0 5px orange;
+}
+
+figure:hover > img{  
+  box-shadow: 0 0 10px black, 0 0 20px orange;  
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+  overflow: hidden;  
+}
+
+figure:active > img{  
+  filter: blur(10px);
 }
