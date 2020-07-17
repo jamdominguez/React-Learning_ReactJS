@@ -125,8 +125,8 @@ It is based in a [Udemy](https://www.udemy.com/) course.
 ## 2.1. What we need?
 - It is necessary a IDE to develop the applications
 - Node.js to use his dependencies manager (NPM) to install the needed libraries
-- Create React App, is a Facebook tool let build a React app envorinment
-- Inter, is a tool help to void errors and support the devlopment
+- Create React App, is a Facebook tool let build a React app environment
+- Linter, is a tool help to void errors and support the devlopment
 
 ## 2.2. Install Node.js and NPM
 Node let us execute JavaScript code in the server side. Node can be dowloaded from the official web [Node](https://nodejs.org/es/), using the downloader and execute the file.
